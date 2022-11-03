@@ -26,6 +26,24 @@ NOTE > The following test command needs to be run to generate the required outpu
 dotnet test VCD-Generator.sln --logger:"nunit;LogFilePath=TestResults/{assembly}.Result.xml" -- NUnit.ShowInternalProperties=true
 ```
 
+The NUnit tests that need to be part of the VCD process need to be annotated with a C# attribute that is part of the NUnit framework. Have a look at the following example:
+
+```
+[TestFixture]
+public class ACoolTestFixture()
+{
+  [Test(Description = "a very fancy test"), Property("REQUIREMENT-ID", "REQ-01")]
+  public void Some_fance_test()
+  {
+    // ... test test test
+  }
+} 
+```
+
+NOTE> Make use of the `Property` attribute which provides a key-value pair. For the VCD-Generator to work provide at least the following `Property("REQUIREMENT-ID", "your-requirement-id")`
+
+When the `REQUIREMENT-ID` is matched to a requirement in the input requirements spreadsheet the report will inlcude the testcase results in the report.
+
 ## Build Status
 
 GitHub actions are used to build and test the library
