@@ -21,8 +21,6 @@
 namespace VCD.Generator.Services
 {
     using System.Collections.Generic;
-    using System.IO;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// The purpose of the <see cref="ITestResultReader"/> is to read all the test results that
@@ -31,15 +29,15 @@ namespace VCD.Generator.Services
     public interface ITestResultReader
     {
         /// <summary>
-        /// Asynchronously reads the <see cref="Test"/>s from the results file in
+        /// Reads the <see cref="TestCase"/>s from the results file in
         /// the specified Directory and sub Directories
         /// </summary>
-        /// <param name="directoryInfo">
-        /// The <see cref="DirectoryInfo"/> from where to start the read
+        /// <param name="path">
+        /// The path to the directory from where to start the read
         /// </param>
         /// <returns>
-        /// An <see cref="IEnumerable{Test}"/>
+        /// An <see cref="IEnumerable{TestCase}"/>
         /// </returns>
-        Task<IEnumerable<Test>> Read(DirectoryInfo directoryInfo);
+        IEnumerable<TestCase> Read(string path);
     }
 }

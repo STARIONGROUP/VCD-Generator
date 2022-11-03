@@ -1,0 +1,29 @@
+<test-run id="2" duration="0.039894" testcasecount="2" total="2" passed="2" failed="0" inconclusive="0" skipped="0" result="Passed" start-time="2022-11-03T 13:02:48Z" end-time="2022-11-03T 13:02:49Z">
+  <test-suite type="Assembly" name="VCD-Generator.Tests.dll" fullname="C:\Users\sgerene\Documents\15-Source-Code\VCD-Generator\VCD-Generator.Tests\bin\Debug\net6.0\VCD-Generator.Tests.dll" total="2" passed="2" failed="0" inconclusive="0" skipped="0" result="Passed" start-time="2022-11-03T 13:02:49Z" end-time="2022-11-03T 13:02:49Z" duration="0.039894">
+    <test-suite type="TestSuite" name="VCD" fullname="VCD" total="2" passed="2" failed="0" inconclusive="0" skipped="0" result="Passed" start-time="2022-11-03T 13:02:49Z" end-time="2022-11-03T 13:02:49Z" duration="0.039894">
+      <test-suite type="TestSuite" name="Generator" fullname="VCD.Generator" total="2" passed="2" failed="0" inconclusive="0" skipped="0" result="Passed" start-time="2022-11-03T 13:02:49Z" end-time="2022-11-03T 13:02:49Z" duration="0.039894">
+        <test-suite type="TestSuite" name="Tests" fullname="VCD.Generator.Tests" total="2" passed="2" failed="0" inconclusive="0" skipped="0" result="Passed" start-time="2022-11-03T 13:02:49Z" end-time="2022-11-03T 13:02:49Z" duration="0.039894">
+          <test-suite type="TestSuite" name="Services" fullname="VCD.Generator.Tests.Services" total="2" passed="2" failed="0" inconclusive="0" skipped="0" result="Passed" start-time="2022-11-03T 13:02:49Z" end-time="2022-11-03T 13:02:49Z" duration="0.039894">
+            <test-suite type="TestFixture" name="RequirementsReaderTestFixture" fullname="VCD.Generator.Tests.Services.RequirementsReaderTestFixture" classname="VCD.Generator.Tests.Services.RequirementsReaderTestFixture" total="1" passed="1" failed="0" inconclusive="0" skipped="0" result="Passed" start-time="2022-11-03T 13:02:49Z" end-time="2022-11-03T 13:02:49Z" duration="0.019867">
+              <test-case name="Verify_that_Read_throws_exception" fullname="VCD.Generator.Tests.Services.RequirementsReaderTestFixture.Verify_that_Read_throws_exception" methodname="Verify_that_Read_throws_exception" classname="RequirementsReaderTestFixture" result="Passed" start-time="2022-11-03T 13:02:49Z" end-time="2022-11-03T 13:02:49Z" duration="0.019867" asserts="0" seed="1876531311">
+                <properties>
+                  <property name="Description" value="Verifies that the Read methods trows an exception" />
+                  <property name="REQUIREMENT-ID" value="REQ-02" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" name="TestResultReaderTestFixture" fullname="VCD.Generator.Tests.Services.TestResultReaderTestFixture" classname="VCD.Generator.Tests.Services.TestResultReaderTestFixture" total="1" passed="1" failed="0" inconclusive="0" skipped="0" result="Passed" start-time="2022-11-03T 13:02:49Z" end-time="2022-11-03T 13:02:49Z" duration="0.020027">
+              <test-case name="Verify_that_Read_throws_exception" fullname="VCD.Generator.Tests.Services.TestResultReaderTestFixture.Verify_that_Read_throws_exception" methodname="Verify_that_Read_throws_exception" classname="TestResultReaderTestFixture" result="Passed" start-time="2022-11-03T 13:02:49Z" end-time="2022-11-03T 13:02:49Z" duration="0.020027" asserts="0" seed="1802193822">
+                <properties>
+                  <property name="Description" value="Verifies that the TestResultReader.Read methods trows an exception" />
+                  <property name="REQUIREMENT-ID" value="REQ-01" />
+                </properties>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <errors />
+  </test-suite>
+</test-run>

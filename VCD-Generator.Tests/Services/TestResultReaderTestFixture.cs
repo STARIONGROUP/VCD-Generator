@@ -18,13 +18,11 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-using System.Security.Cryptography;
-
 namespace VCD.Generator.Tests.Services
 {
-    using System;
+    using System.Collections.Generic;
     using System.IO;
-    using System.Threading.Tasks;
+    using System.Linq;
 
     using NUnit.Framework;
 
@@ -38,19 +36,29 @@ namespace VCD.Generator.Tests.Services
     {
         private TestResultReader testResultReader;
 
-        private DirectoryInfo directoryInfo;
+        private string path;
 
         [SetUp]
         public void SetUp()
         {
+            this.path = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data");
+
             this.testResultReader = new TestResultReader();
         }
 
-        [Test(Description = "Verifies that the Read methods trows an exception"), Property("REQUIREMENT-ID", "REQ-01")]
-        public async Task Verify_that_Read_throws_exception()
+        [Test(Description = "Verifies that the TestResultReader.Read methods trows an exception"), Property("REQUIREMENT-ID", "REQ-01")]
+        public void Verify_that_Read_throws_exception()
         {
-            Assert.That(async () => await this.testResultReader.Read(this.directoryInfo),
-                Throws.TypeOf<NotImplementedException>());
+            var testCases = this.testResultReader.Read(this.path).ToList();
+
+            Assert.That(testCases.Count, Is.EqualTo(2));
+
+            var testCase = testCases.Single(x => x.FullName== "VCD.Generator.Tests.Services.TestResultReaderTestFixture.Verify_that_Read_throws_exception");
+
+            Assert.That(testCase.Name, Is.EqualTo("Verify_that_Read_throws_exception"));
+            Assert.That(testCase.Description, Is.EqualTo("Verifies that the TestResultReader.Read methods trows an exception"));
+            Assert.That(testCase.Result, Is.EqualTo("Passed"));
+            Assert.That(testCase.RequirementId, Is.EquivalentTo(new List<string> { "REQ-01" }));
         }
     }
 }

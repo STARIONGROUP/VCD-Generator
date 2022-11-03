@@ -20,10 +20,9 @@
 
 namespace VCD.Generator.Services
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Threading.Tasks;
+    using System.Xml;
 
     /// <summary>
     /// The purpose of the <see cref="TestResultReader"/> is to read all the test results that
@@ -31,20 +30,83 @@ namespace VCD.Generator.Services
     /// </summary>
     public class TestResultReader : ITestResultReader
     {
-
         /// <summary>
-        /// Asynchronously reads the <see cref="Test"/>s from the results file in
+        /// Asynchronously reads the <see cref="TestCase"/>s from the results file in
         /// the specified Directory and sub Directories
         /// </summary>
-        /// <param name="directoryInfo">
-        /// The <see cref="DirectoryInfo"/> from where to start the read
+        /// <param name="path">
+        /// The path to the directory from where to start the read
         /// </param>
         /// <returns>
-        /// An <see cref="IEnumerable{Test}"/>
+        /// An <see cref="IEnumerable{TestCase}"/>
         /// </returns>
-        public Task<IEnumerable<Test>> Read(DirectoryInfo directoryInfo)
+        public IEnumerable<TestCase> Read(string path)
         {
-            throw new NotImplementedException();
+            var files = Directory.GetFiles(path, "*.Result.xml", SearchOption.AllDirectories);
+
+            var result = new List<TestCase>();
+
+            foreach (var file in files)
+            {
+                var testCases = this.ReadXml(file);
+
+                result.AddRange(testCases);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Reads the <see cref="TestCase"/> objects from the specified results file
+        /// </summary>
+        /// <param name="fileName">
+        /// path to the test result file
+        /// </param>
+        /// <returns>
+        /// An <see cref="IEnumerable{TestCase}"/>
+        /// </returns>
+        private IEnumerable<TestCase> ReadXml(string fileName)
+        {
+            var testCases = new List<TestCase>();
+
+            var xmlDocument = new XmlDocument();
+            xmlDocument.Load(fileName);
+
+            var testCaseNodes = xmlDocument.GetElementsByTagName("test-case");
+
+            foreach (XmlNode testCaseNode in testCaseNodes)
+            {
+                var testCase = new TestCase();
+                
+                testCase.Name = testCaseNode.Attributes["name"]?.Value;
+                testCase.FullName = testCaseNode.Attributes["fullname"]?.Value;
+                testCase.Result = testCaseNode.Attributes["result"]?.Value;
+
+                var propertyNodes = testCaseNode.SelectNodes("properties//property");
+
+                foreach (XmlNode propertyNode in propertyNodes)
+                {
+                    var propertyName = propertyNode.Attributes["name"]?.Value;
+
+                    switch (propertyName)
+                    {
+                        case "Description":
+                            testCase.Description = propertyNode.Attributes["value"]?.Value;
+                            break;
+                        case "REQUIREMENT-ID":
+                            var requirementId = propertyNode.Attributes["value"]?.Value;
+                            if (!string.IsNullOrEmpty(requirementId))
+                            {
+                                testCase.RequirementId.Add(requirementId);
+                            }
+                            break;
+                    }
+                }
+
+                testCases.Add(testCase);
+            }
+
+            return testCases;
         }
     }
 }

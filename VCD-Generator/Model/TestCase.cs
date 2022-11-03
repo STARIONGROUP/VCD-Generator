@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="Test.cs" company="RHEA System S.A.">
+// <copyright file="TestCase.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022 RHEA System S.A.
 // 
@@ -23,20 +23,25 @@ namespace VCD.Generator
     using System.Collections.Generic;
 
     /// <summary>
-    /// Represents a <see cref="Test"/> in a test suite that is used to verify a <see cref="Requirement"/>
+    /// Represents a <see cref="TestCase"/> in a test suite that is used to verify a <see cref="Requirement"/>
     /// </summary>
-    public class Test
+    public class TestCase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Test"/> class.
+        /// Initializes a new instance of the <see cref="TestCase"/> class.
         /// </summary>
-        public Test()
+        public TestCase()
         {
             this.RequirementId = new List<string>();
         }
 
         /// <summary>
-        /// Gets or sets the fullname of the test method (includes the 
+        /// Gets or sets the name of the test method (includes the 
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the qualified name of the test method
         /// </summary>
         public string FullName { get; set; }
 
@@ -46,7 +51,12 @@ namespace VCD.Generator
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the list of requirement identifiers that this <see cref="Test"/> verifies
+        /// Gets or sets the test result (pass, fail, inconclusive)
+        /// </summary>
+        public string Result { get; set; }
+
+        /// <summary>
+        /// Gets or sets the list of requirement identifiers that this <see cref="TestCase"/> verifies
         /// </summary>
         public List<string> RequirementId { get; set; }
     }
