@@ -20,7 +20,8 @@ The VCD Generator needs 2 inputs:
   - Requirements: in tabular form (excel spreadsheet), where one of the columns needs to contain the human readable unique identifier of the requirements.
   - Nunit results: in xml form generated using the `NunitXml.TestLogger` logger
 
-NOTE > The following test command needs to be run to generate the required output
+> **Note**
+> The following test command needs to be run to generate the required output
 
 ```
 dotnet test VCD-Generator.sln --logger:"nunit;LogFilePath=TestResults/{assembly}.Result.xml" -- NUnit.ShowInternalProperties=true
@@ -40,7 +41,8 @@ public class ACoolTestFixture()
 } 
 ```
 
-NOTE> Make use of the `Property` attribute which provides a key-value pair. For the VCD-Generator to work provide at least the following `Property("REQUIREMENT-ID", "your-requirement-id")`
+> **Note**
+> Make use of the `Property` attribute which provides a key-value pair. For the VCD-Generator to work provide at least the following `Property("REQUIREMENT-ID", "your-requirement-id")`
 
 When the `REQUIREMENT-ID` is matched to a requirement in the input requirements spreadsheet the report will inlcude the testcase results in the report.
 
