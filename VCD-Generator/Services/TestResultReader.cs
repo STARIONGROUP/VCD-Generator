@@ -63,13 +63,13 @@ namespace VCD.Generator.Services
         {
             var files = Directory.GetFiles(path, "*.Result.xml", SearchOption.AllDirectories);
 
-            this.logger.LogDebug("{0} Result files found", files.Length);
+            this.logger.LogDebug("{fileLength} Result files found", files.Length);
 
             var result = new List<TestCase>();
 
             foreach (var file in files)
             {
-                this.logger.LogDebug("processing: {0}", file);
+                this.logger.LogDebug("processing: {file}", file);
 
                 var testCases = this.ReadXml(file);
 
@@ -97,7 +97,7 @@ namespace VCD.Generator.Services
 
             var testCaseNodes = xmlDocument.GetElementsByTagName("test-case");
 
-            this.logger.LogDebug("found a total of {0} testcases in {1}", testCaseNodes.Count, fileName);
+            this.logger.LogDebug("found a total of {testCaseNodesCount} testcases in {fileName}", testCaseNodes.Count, fileName);
 
             foreach (XmlNode testCaseNode in testCaseNodes)
             {
@@ -131,7 +131,7 @@ namespace VCD.Generator.Services
                 testCases.Add(testCase);
             }
 
-            this.logger.LogDebug("created a total of {0} TestCase objects from {1}", testCases.Count, fileName);
+            this.logger.LogDebug("created a total of {testCasesCount} TestCase objects from {fileName}", testCases.Count, fileName);
 
             return testCases;
         }
