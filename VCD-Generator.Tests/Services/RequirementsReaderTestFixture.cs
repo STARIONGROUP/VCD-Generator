@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="TestResultReaderTestFixture.cs" company="RHEA System S.A.">
+// <copyright file="RequirementsReaderTestFixture.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022 RHEA System S.A.
 // 
@@ -18,8 +18,6 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-using System.Security.Cryptography;
-
 namespace VCD.Generator.Tests.Services
 {
     using System;
@@ -31,25 +29,27 @@ namespace VCD.Generator.Tests.Services
     using VCD.Generator.Services;
 
     /// <summary>
-    /// Suite of tests for the <see cref="TestResultReader"/> class
+    /// Suite of tests for the <see cref="RequirementsReader"/> class
     /// </summary>
     [TestFixture]
-    public class TestResultReaderTestFixture
+    public class RequirementsReaderTestFixture
     {
-        private TestResultReader testResultReader;
+        private RequirementsReader requirementsReader;
 
-        private DirectoryInfo directoryInfo;
+        private string requirementsDocumentPath;
 
         [SetUp]
         public void SetUp()
         {
-            this.testResultReader = new TestResultReader();
+            this.requirementsDocumentPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "Requirements.xlsx");
+
+            this.requirementsReader = new RequirementsReader();
         }
 
-        [Test(Description = "Verifies that the Read methods trows an exception"), Property("REQUIREMENT-ID", "REQ-01")]
+        [Test(Description = "Verifies that the Read methods trows an exception"), Property("REQUIREMENT-ID", "REQ-02")]
         public async Task Verify_that_Read_throws_exception()
         {
-            Assert.That(async () => await this.testResultReader.Read(this.directoryInfo),
+            Assert.That(async () => await this.requirementsReader.Read(this.requirementsDocumentPath),
                 Throws.TypeOf<NotImplementedException>());
         }
     }
