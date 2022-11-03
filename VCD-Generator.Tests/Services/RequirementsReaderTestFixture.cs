@@ -20,9 +20,10 @@
 
 namespace VCD.Generator.Tests.Services
 {
-    using System;
+    using System.Linq;
     using System.IO;
-    using System.Threading.Tasks;
+
+    using Microsoft.Extensions.Logging;
 
     using NUnit.Framework;
 
@@ -38,19 +39,51 @@ namespace VCD.Generator.Tests.Services
 
         private string requirementsDocumentPath;
 
+        private ILoggerFactory loggerFactory;
+
         [SetUp]
         public void SetUp()
         {
+            this.loggerFactory = LoggerFactory.Create(builder =>
+                builder.AddConsole().SetMinimumLevel(LogLevel.Trace));
+
             this.requirementsDocumentPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "Requirements.xlsx");
 
-            this.requirementsReader = new RequirementsReader();
+            this.requirementsReader = new RequirementsReader(this.loggerFactory);
         }
 
-        [Test(Description = "Verifies that the Read methods trows an exception"), Property("REQUIREMENT-ID", "REQ-02")]
-        public async Task Verify_that_Read_throws_exception()
+        [Test(Description = "Verifies that the RequirementsReader.Read methods returns the expected requirements"), Property("REQUIREMENT-ID", "REQ-02")]
+        public void Verify_that_Read_returns_the_expected_requirements()
         {
-            Assert.That(async () => await this.requirementsReader.Read(this.requirementsDocumentPath),
-                Throws.TypeOf<NotImplementedException>());
+            var requriements = this.requirementsReader.Read(this.requirementsDocumentPath).ToList();
+
+            Assert.That(requriements.Count, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void Verify_that_Read_with_idcolumn_returns_the_expected_requirements()
+        {
+            var requriements = this.requirementsReader.Read(this.requirementsDocumentPath, null, "Identifier").ToList();
+
+            Assert.That(requriements.Count, Is.EqualTo(2));
+
+            var requirement = requriements.First();
+
+            Assert.That(requirement.Identifier, Is.EqualTo("REQ-01"));
+            Assert.That(requirement.Text, Is.EqualTo(""));
+        }
+
+        [Test]
+        public void Verify_that_Read_with_idcolumn_and_textcolumn_returns_the_expected_requirements()
+        {
+            var requriements = this.requirementsReader.Read(this.requirementsDocumentPath, null, "Identifier", "Requirement Text").ToList();
+
+            Assert.That(requriements.Count, Is.EqualTo(2));
+
+            var requirement = requriements.First();
+
+            Assert.That(requirement.Identifier, Is.EqualTo("REQ-01"));
+            Assert.That(requirement.Text, Is.EqualTo("The VCD Generator shall read the test results created by the NunitXml.TestLogger in the Nunit3 output format"));
         }
     }
 }

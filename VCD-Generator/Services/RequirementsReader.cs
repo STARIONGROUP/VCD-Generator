@@ -21,7 +21,12 @@
 namespace VCD.Generator.Services
 {
     using System.Collections.Generic;
-    using System.Threading.Tasks;
+    using System.IO;
+    
+    using ClosedXML.Excel;
+
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
 
     /// <summary>
     /// The purpose of the <see cref="IRequirementsReader"/> is to read the list of requirements
@@ -33,25 +38,142 @@ namespace VCD.Generator.Services
     public class RequirementsReader : IRequirementsReader
     {
         /// <summary>
-        /// Asynchronously reads the <see cref="Requirement"/>s from the specified file path
+        /// The <see cref="ILogger"/> used to log
         /// </summary>
-        /// <param name="path">
-        /// The path to the requirements input file
+        private readonly ILogger<RequirementsReader> logger;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TestResultReader"/> class.
+        /// </summary>
+        /// <param name="loggerFactory">
+        /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
+        public RequirementsReader(ILoggerFactory loggerFactory = null)
+        {
+            this.logger = loggerFactory == null ? NullLogger<RequirementsReader>.Instance : loggerFactory.CreateLogger<RequirementsReader>();
+        }
+
+        /// <summary>
+        /// Reads the <see cref="Requirement"/>s from the specified file fileName
+        /// </summary>
+        /// <param name="fileName">
+        /// The fileName to the requirements input file
         /// </param>
         /// <param name="sheetName">
         /// The name of the sheet where the requirements are located, in case this is null the first sheet in the
         /// workbook is used
         /// </param>
-        /// <param name="columnName">
+        /// <param name="identifierColumnName">
         /// The name of the column where the unique identifier of the requirements is located on the sheet, in case
-        /// this is null, the first column (A) in the sheet is used
+        /// this is null, the first used column in the sheet is used
+        /// </param>
+        /// <param name="textColumnName">
+        /// The name of the column where the requirement text is located. In case this is null the requirement text is ignored
         /// </param>
         /// <returns>
         /// An <see cref="IEnumerable{Requirement}"/>
         /// </returns>
-        public Task<IEnumerable<Requirement>> Read(string path, string sheetName = null, string columnName = null)
+        public IEnumerable<Requirement> Read(string fileName, string sheetName = null, string identifierColumnName = null, string textColumnName = null)
         {
-            throw new System.NotImplementedException();
+            using var fs = File.OpenRead(fileName);
+            var wb = new XLWorkbook(fs);
+
+            IXLWorksheet requirementsSheet;
+
+            if (sheetName == null)
+            {
+                requirementsSheet = wb.Worksheet(1);
+            }
+            else
+            {
+                requirementsSheet = wb.Worksheet(sheetName);
+            }
+
+            var results = new List<Requirement>();
+
+            var requirementIdColumnNumber = -1;
+            var requirementTextColumnNumber = -1;
+            
+            var firstRowUsed = requirementsSheet.FirstRowUsed();
+            var lastRowUsed = requirementsSheet.LastRowUsed();
+            var headerRow = firstRowUsed.RowUsed();
+            
+            var firstCell = headerRow.FirstCellUsed();
+            var firstCellColumnNumber = firstCell.Address.ColumnNumber;
+            
+            var lastCell = headerRow.LastCellUsed();
+            var lastCellColumnNumber = lastCell.Address.ColumnNumber;
+
+            requirementIdColumnNumber = this.QueryColumnNumber(identifierColumnName, headerRow, firstCellColumnNumber, lastCellColumnNumber);
+            requirementTextColumnNumber = this.QueryColumnNumber(textColumnName, headerRow, firstCellColumnNumber, lastCellColumnNumber);
+
+            if (requirementIdColumnNumber == -1)
+            {
+                throw new InvalidRequirementsFormatException($"The identifier column with name {identifierColumnName} could not be found");
+            }
+            
+            for (int i = headerRow.RowNumber() + 1; i < lastRowUsed.RowNumber() + 1; i++)
+            {
+                var identifier = requirementsSheet.Cell(i, requirementIdColumnNumber).Value.ToString();
+                string text = string.Empty;
+
+                if (textColumnName != null)
+                {
+                    text = requirementsSheet.Cell(i, requirementTextColumnNumber).Value.ToString();
+                }
+                
+                if (!string.IsNullOrEmpty(identifier))
+                {
+                    this.logger.LogDebug("requirement found: {identifier}", identifier);
+
+                    var requirement = new Requirement
+                    {
+                        Identifier = identifier,
+                        Text = text
+                    };
+
+                    results.Add(requirement);
+                }
+            }
+            
+            return results;
+        }
+
+        /// <summary>
+        /// Queries the column number from the cell with the specified value in the provided row
+        /// </summary>
+        /// <param name="columnName">
+        /// the name of the column that is being queried
+        /// </param>
+        /// <param name="row">
+        /// the row in which the data is queried
+        /// </param>
+        /// <param name="start">
+        /// the starting cell in the row
+        /// </param>
+        /// <param name="end">
+        /// the ending cell in the row
+        /// </param>
+        /// <returns></returns>
+        private int QueryColumnNumber(string columnName, IXLRangeRow row, int start, int end)
+        {
+            if (columnName != null)
+            {
+                for (int i = start - 1; i < end; i++)
+                {
+                    var activeCell = row.Cell(i);
+                    var activeCellValue = activeCell.Value.ToString();
+
+                    if (activeCellValue == columnName)
+                    {
+                        this.logger.LogDebug($"{columnName}: {i}");
+                        return i + 1;
+                    }
+                }
+            }
+
+            this.logger.LogDebug($"{columnName}: {start}");
+            return start;
         }
     }
 }

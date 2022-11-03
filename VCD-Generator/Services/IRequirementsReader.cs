@@ -21,7 +21,6 @@
 namespace VCD.Generator.Services
 {
     using System.Collections.Generic;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// The purpose of the <see cref="IRequirementsReader"/> is to read the list of requirements
@@ -33,22 +32,25 @@ namespace VCD.Generator.Services
     public interface IRequirementsReader
     {
         /// <summary>
-        /// Asynchronously reads the <see cref="Requirement"/>s from the specified file path
+        /// Reads the <see cref="Requirement"/>s from the specified file fileName
         /// </summary>
-        /// <param name="path">
-        /// The path to the requirements input file
+        /// <param name="fileName">
+        /// The fileName to the requirements input file
         /// </param>
         /// <param name="sheetName">
         /// The name of the sheet where the requirements are located, in case this is null the first sheet in the
         /// workbook is used
         /// </param>
-        /// <param name="columnName">
+        /// <param name="identifierColumnName">
         /// The name of the column where the unique identifier of the requirements is located on the sheet, in case
-        /// this is null, the first column (A) in the sheet is used
+        /// this is null, the first used column in the sheet is used
+        /// </param>
+        /// <param name="textColumnName">
+        /// The name of the column where the requirement text is located. In case this is null the requirement text is ignored
         /// </param>
         /// <returns>
         /// An <see cref="IEnumerable{Requirement}"/>
         /// </returns>
-        Task<IEnumerable<Requirement>> Read(string path, string sheetName = null, string columnName = null);
+        IEnumerable<Requirement> Read(string fileName, string sheetName = null, string identifierColumnName = null, string textColumnName = null);
     }
 }
