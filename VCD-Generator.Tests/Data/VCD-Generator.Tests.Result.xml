@@ -7,7 +7,7 @@
             <test-suite type="TestFixture" name="RequirementsReaderTestFixture" fullname="VCD.Generator.Tests.Services.RequirementsReaderTestFixture" classname="VCD.Generator.Tests.Services.RequirementsReaderTestFixture" total="1" passed="1" failed="0" inconclusive="0" skipped="0" result="Passed" start-time="2022-11-03T 13:02:49Z" end-time="2022-11-03T 13:02:49Z" duration="0.019867">
               <test-case name="Verify_that_Read_throws_exception" fullname="VCD.Generator.Tests.Services.RequirementsReaderTestFixture.Verify_that_Read_throws_exception" methodname="Verify_that_Read_throws_exception" classname="RequirementsReaderTestFixture" result="Passed" start-time="2022-11-03T 13:02:49Z" end-time="2022-11-03T 13:02:49Z" duration="0.019867" asserts="0" seed="1876531311">
                 <properties>
-                  <property name="Description" value="Verifies that the Read methods trows an exception" />
+                  <property name="Description" value="Verifies that the RequirementsReader.Read methods trows an exception" />
                   <property name="REQUIREMENT-ID" value="REQ-02" />
                 </properties>
               </test-case>

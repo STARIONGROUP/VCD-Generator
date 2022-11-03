@@ -1,5 +1,5 @@
 ﻿// -------------------------------------------------------------------------------------------------
-// <copyright file="Requirement.cs" company="RHEA System S.A.">
+// <copyright file="IMatchMaker.cs" company="RHEA System S.A.">
 // 
 //   Copyright 2022 RHEA System S.A.
 // 
@@ -18,36 +18,28 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-namespace VCD.Generator
+namespace VCD.Generator.Services
 {
     using System.Collections.Generic;
 
     /// <summary>
-    /// Represents a <see cref="Requirement"/> that is verified
+    /// The purpose of the <see cref="IMatchMaker"/> is to match the provided <see cref="TestCase"/> and
+    /// <see cref="Requirement"/> objects
     /// </summary>
-    public class Requirement
+    public interface IMatchMaker
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Requirement"/> class.
+        /// Matches <see cref="TestCase"/> and <see cref="Requirement"/> objects.
         /// </summary>
-        public Requirement()
-        {
-            this.TestCases = new List<TestCase>();
-        }
-
-        /// <summary>
-        /// Gets or sets the human readable unique identifier
-        /// </summary>
-        public string Identifier { get; set; }
-
-        /// <summary>
-        /// Gets or sets the requirement text
-        /// </summary>
-        public string Text { get; set; }
-
-        /// <summary>
-        /// Gets or sets the names of the tests
-        /// </summary>
-        public List<TestCase> TestCases { get; set; }
+        /// <param name="requirements">
+        /// The subject <see cref="Requirement"/> objects that need to be matched
+        /// </param>
+        /// <param name="testCases">
+        /// The subject <see cref="TestCase"/> objects that need to be matched
+        /// </param>
+        /// <remarks>
+        /// The <see cref="Requirement.TestCases"/> property is updated with matched <see cref="TestCase"/> objects
+        /// </remarks>
+        void Match(IEnumerable<Requirement> requirements, IEnumerable<TestCase> testCases);
     }
 }
