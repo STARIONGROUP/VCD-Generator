@@ -22,9 +22,9 @@ The VCD Generator needs 2 inputs:
 
 NOTE > The following test command needs to be run to generate the required output
 
-'''
+```
 dotnet test VCD-Generator.sln --logger:"nunit;LogFilePath=TestResults/{assembly}.Result.xml" -- NUnit.ShowInternalProperties=true
-'''
+```
 
 ## Build Status
 

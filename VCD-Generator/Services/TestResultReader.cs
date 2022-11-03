@@ -24,12 +24,31 @@ namespace VCD.Generator.Services
     using System.IO;
     using System.Xml;
 
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Logging.Abstractions;
+
     /// <summary>
     /// The purpose of the <see cref="TestResultReader"/> is to read all the test results that
     /// are located in a folder (and sub folders). A test file ends with .Result.xml
     /// </summary>
     public class TestResultReader : ITestResultReader
     {
+        /// <summary>
+        /// The <see cref="ILogger"/> used to log
+        /// </summary>
+        private readonly ILogger<TestResultReader> logger;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TestResultReader"/> class.
+        /// </summary>
+        /// <param name="loggerFactory">
+        /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
+        /// </param>
+        public TestResultReader(ILoggerFactory loggerFactory = null)
+        {
+            this.logger = loggerFactory == null ? NullLogger<TestResultReader>.Instance : loggerFactory.CreateLogger<TestResultReader>();
+        }
+
         /// <summary>
         /// Asynchronously reads the <see cref="TestCase"/>s from the results file in
         /// the specified Directory and sub Directories
@@ -44,10 +63,14 @@ namespace VCD.Generator.Services
         {
             var files = Directory.GetFiles(path, "*.Result.xml", SearchOption.AllDirectories);
 
+            this.logger.LogDebug("{0} Result files found", files.Length);
+
             var result = new List<TestCase>();
 
             foreach (var file in files)
             {
+                this.logger.LogDebug("processing: {0}", file);
+
                 var testCases = this.ReadXml(file);
 
                 result.AddRange(testCases);
@@ -73,6 +96,8 @@ namespace VCD.Generator.Services
             xmlDocument.Load(fileName);
 
             var testCaseNodes = xmlDocument.GetElementsByTagName("test-case");
+
+            this.logger.LogDebug("found a total of {0} testcases in {1}", testCaseNodes.Count, fileName);
 
             foreach (XmlNode testCaseNode in testCaseNodes)
             {
@@ -105,6 +130,8 @@ namespace VCD.Generator.Services
 
                 testCases.Add(testCase);
             }
+
+            this.logger.LogDebug("created a total of {0} TestCase objects from {1}", testCases.Count, fileName);
 
             return testCases;
         }

@@ -24,6 +24,8 @@ namespace VCD.Generator.Tests.Services
     using System.IO;
     using System.Linq;
 
+    using Microsoft.Extensions.Logging;
+
     using NUnit.Framework;
 
     using VCD.Generator.Services;
@@ -38,12 +40,17 @@ namespace VCD.Generator.Tests.Services
 
         private string path;
 
+        private ILoggerFactory loggerFactory;
+
         [SetUp]
         public void SetUp()
         {
+            this.loggerFactory = LoggerFactory.Create(builder => 
+                builder.AddConsole().SetMinimumLevel(LogLevel.Trace));
+            
             this.path = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data");
 
-            this.testResultReader = new TestResultReader();
+            this.testResultReader = new TestResultReader(this.loggerFactory);
         }
 
         [Test(Description = "Verifies that the TestResultReader.Read methods trows an exception"), Property("REQUIREMENT-ID", "REQ-01")]
