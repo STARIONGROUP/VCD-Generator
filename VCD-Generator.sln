@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VCD-Orchestrator", "VCD-Orchestrator\VCD-Orchestrator.csproj", "{5BDE2905-279D-47C3-9697-102F277C7E83}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VCD-Generator", "VCD-Generator\VCD-Generator.csproj", "{3FE4199C-2E07-4E63-9D96-BD73DD0ABAB7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VCD-Generator.Tests", "VCD-Generator.Tests\VCD-Generator.Tests.csproj", "{1F62065A-2C81-4771-9E09-11AC9B11274B}"
@@ -23,10 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5BDE2905-279D-47C3-9697-102F277C7E83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5BDE2905-279D-47C3-9697-102F277C7E83}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5BDE2905-279D-47C3-9697-102F277C7E83}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5BDE2905-279D-47C3-9697-102F277C7E83}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3FE4199C-2E07-4E63-9D96-BD73DD0ABAB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3FE4199C-2E07-4E63-9D96-BD73DD0ABAB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FE4199C-2E07-4E63-9D96-BD73DD0ABAB7}.Release|Any CPU.ActiveCfg = Release|Any CPU

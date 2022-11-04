@@ -88,7 +88,7 @@ namespace VCD.Generator.Services
         {
             var wb = new XLWorkbook();
 
-            var now = DateTime.UtcNow.ToString("yyyy-mm-dd");
+            var now = DateTime.UtcNow.ToString("yyyy-MM-dd");
             
             var worksheet = wb.Worksheets.Add($"VCD-{now}");
 
