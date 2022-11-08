@@ -44,7 +44,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Run VCD-Generator
-        run: vcdg -rf VCD-Generator.Tests/Data/Requirements.xlsx -sd . -o vcd-report.xlsx
+        run: vcdg -rf VCD-Generator.Tests/Data/Requirements.xlsx --requirements-sheet-name requirements --requirements-id-column Identifier --requirements-text-column "Requirement Text" --source-directory . --output-report vcd-report.xlsx
 
       - name: Archive results
         uses: actions/upload-artifact@v3
