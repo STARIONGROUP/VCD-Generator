@@ -100,7 +100,7 @@ namespace VCD.Generator.Commands
             /// <summary>
             /// The (injected) <see cref="ILogger"/>
             /// </summary>
-            private readonly ILogger logger;
+            private readonly ILogger<GenerateCommand> logger;
 
             /// <summary>
             /// Initializes a nwe instance of the <see cref="Handler"/> class.
@@ -120,7 +120,7 @@ namespace VCD.Generator.Commands
             /// <param name="logger">
             /// The (injected) <see cref="ILogger{Handler}"/>
             /// </param>
-            public Handler(IRequirementsReader requirementsReader, ITestResultReader resultReader, IMatchMaker matchMaker, IReportGenerator reportGenerator, ILogger logger)
+            public Handler(IRequirementsReader requirementsReader, ITestResultReader resultReader, IMatchMaker matchMaker, IReportGenerator reportGenerator, ILogger<GenerateCommand>  logger)
             {
                 this.requirementsReader = requirementsReader 
                     ?? throw new ArgumentNullException(nameof(requirementsReader));

@@ -35,9 +35,7 @@ namespace VCD.Generator.Tests.Services
     public class MatchMakerTestFixture
     {
         private MatchMaker matchMaker;
-
-        private string requirementsDocumentPath;
-
+        
         private ILoggerFactory loggerFactory;
 
         private List<Requirement> requirements;

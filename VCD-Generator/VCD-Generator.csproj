@@ -1,24 +1,31 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	  <ToolCommandName>vcdg</ToolCommandName>
-	  <OutputType>Exe</OutputType>
-	  <TargetFramework>net6.0</TargetFramework>
-	  <RootNamespace>VCD.Generator</RootNamespace>
-	  <Version>0.1.0</Version>
-	  <Description>A Verification Control Document (VCD) generator.</Description>
-	  <PackageId>VCD.Generator</PackageId>
-	  <Company>RHEA System S.A.</Company>
-	  <Copyright>Copyright 2022 RHEA System S.A.</Copyright>
-	  <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-	  <RepositoryUrl>https://github.com/RHEAGROUP/VCD-Generator.git</RepositoryUrl>
-	  <RepositoryType>Git</RepositoryType>
-	  <Authors>Sam Gerené, Alexander van Delft</Authors>
-	  <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
-	  <PackageReleaseNotes>
-		  [Initial] release
-	  </PackageReleaseNotes>
-  </PropertyGroup>
+	<PropertyGroup Label="Package">
+		<Title>VCD Generator</Title>
+		<Description>A Verification Control Document (VCD) generator.</Description>
+		<TargetFramework>net6.0</TargetFramework>
+		<OutputType>Exe</OutputType>
+		<PackAsTool>true</PackAsTool>
+		<PackageId>vcdg</PackageId>
+		<ToolCommandName>vcdg</ToolCommandName>
+		<PackageOutputPath>./nupkg</PackageOutputPath>
+		<RootNamespace>VCD.Generator</RootNamespace>
+		<Version>0.2.0</Version>
+		<PackageReleaseNotes>[Initial] release</PackageReleaseNotes>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Copyright">
+		<Company>RHEA System S.A.</Company>
+		<Copyright>Copyright 2022 RHEA System S.A.</Copyright>
+		<Authors>Sam Gerené, Alexander van Delft</Authors>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<RequireLicenseAcceptance>true</RequireLicenseAcceptance>
+	</PropertyGroup>
+
+	<PropertyGroup Label="Repository">
+		<RepositoryType>Git</RepositoryType>
+		<RepositoryUrl>https://github.com/RHEAGROUP/VCD-Generator.git</RepositoryUrl>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
@@ -37,9 +44,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="appsettings.json">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
+		<None Update="appsettings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 </Project>

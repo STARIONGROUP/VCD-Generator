@@ -49,7 +49,7 @@ namespace VCD.Generator.Tests.Commands
 
         private Mock<IReportGenerator> reportGenerator;
 
-        private Mock<ILogger> logger;
+        private Mock<ILogger<GenerateCommand>> logger;
 
         private GenerateCommand.Handler handler;
 
@@ -67,7 +67,7 @@ namespace VCD.Generator.Tests.Commands
 
             this.matchMaker = new Mock<IMatchMaker>();
             this.reportGenerator = new Mock<IReportGenerator>();
-            this.logger = new Mock<ILogger>();
+            this.logger = new Mock<ILogger<GenerateCommand>>();
 
             this.handler = new GenerateCommand.Handler(
                 this.requirementsReader.Object,
