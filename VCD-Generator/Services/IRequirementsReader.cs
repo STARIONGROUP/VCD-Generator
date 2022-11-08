@@ -21,6 +21,7 @@
 namespace VCD.Generator.Services
 {
     using System.Collections.Generic;
+    using System.IO;
 
     /// <summary>
     /// The purpose of the <see cref="IRequirementsReader"/> is to read the list of requirements
@@ -34,8 +35,8 @@ namespace VCD.Generator.Services
         /// <summary>
         /// Reads the <see cref="Requirement"/>s from the specified file fileName
         /// </summary>
-        /// <param name="fileName">
-        /// The fileName to the requirements input file
+        /// <param name="fileInfo">
+        /// The <see cref="FileInfo"/> to the requirements input file
         /// </param>
         /// <param name="sheetName">
         /// The name of the sheet where the requirements are located, in case this is null the first sheet in the
@@ -51,6 +52,6 @@ namespace VCD.Generator.Services
         /// <returns>
         /// An <see cref="IEnumerable{Requirement}"/>
         /// </returns>
-        IEnumerable<Requirement> Read(string fileName, string sheetName = null, string identifierColumnName = null, string textColumnName = null);
+        IEnumerable<Requirement> Read(FileInfo fileInfo, string sheetName = null, string identifierColumnName = null, string textColumnName = null);
     }
 }

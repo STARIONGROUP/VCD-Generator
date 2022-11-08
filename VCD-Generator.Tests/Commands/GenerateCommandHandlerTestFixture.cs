@@ -57,12 +57,12 @@ namespace VCD.Generator.Tests.Commands
         public void SetUp()
         {
             this.requirementsReader = new Mock<IRequirementsReader>();
-            this.requirementsReader.Setup(x => x.Read(It.IsAny<string>(),
+            this.requirementsReader.Setup(x => x.Read(It.IsAny<FileInfo>(),
                     It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(Enumerable.Empty<Requirement>());
 
             this.resultReader = new Mock<ITestResultReader>();
-            this.resultReader.Setup(x => x.Read(It.IsAny<string>()))
+            this.resultReader.Setup(x => x.Read(It.IsAny<DirectoryInfo>()))
                 .Returns(Enumerable.Empty<TestCase>());
 
             this.matchMaker = new Mock<IMatchMaker>();
@@ -76,9 +76,9 @@ namespace VCD.Generator.Tests.Commands
                 this.reportGenerator.Object,
                 this.logger.Object);
 
-            this.handler.RequirementsFile = new FileInfo(TestContext.CurrentContext.WorkDirectory);
+            this.handler.RequirementsFile = new FileInfo(Path.Combine(TestContext.CurrentContext.TestDirectory, "Data", "Requirements.xlsx"));
             this.handler.SourceDirectory = new DirectoryInfo(TestContext.CurrentContext.WorkDirectory);
-            this.handler.OutputReport = new FileInfo(TestContext.CurrentContext.WorkDirectory);
+            this.handler.OutputReport = new FileInfo(TestContext.CurrentContext.TestDirectory);
         }
 
         [Test]
@@ -89,10 +89,10 @@ namespace VCD.Generator.Tests.Commands
             var result = await this.handler.InvokeAsync(invocationContext);
 
             this.requirementsReader.Verify(x =>
-                x.Read(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()),
+                x.Read(It.IsAny<FileInfo>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()),
                 Times.Once);
 
-            this.resultReader.Verify(x => x.Read(It.IsAny<string>()),
+            this.resultReader.Verify(x => x.Read(It.IsAny<DirectoryInfo>()),
                 Times.Once);
 
             this.matchMaker.Verify(
@@ -101,9 +101,32 @@ namespace VCD.Generator.Tests.Commands
 
             this.reportGenerator.Verify(x => x.Generate(It.IsAny<IEnumerable<Requirement>>(), It.IsAny<string>(), ReportKind.SpreadSheet),
                 Times.Once);
-
-
+            
             Assert.That(result, Is.EqualTo(0));
+        }
+
+        [Test]
+        public async Task Verify_that_InvokeAsync_returns_minus_one_when_requirementsfile_does_not_exist()
+        {
+            var invocationContext = new InvocationContext(null);
+
+            this.handler.RequirementsFile = new FileInfo(TestContext.CurrentContext.TestDirectory);
+
+            var result = await this.handler.InvokeAsync(invocationContext);
+
+            Assert.That(result, Is.EqualTo(-1));
+        }
+
+        [Test]
+        public async Task Verify_that_InvokeAsync_returns_minus_one_when_sourcedirectory_dooes_not_exist()
+        {
+            var invocationContext = new InvocationContext(null);
+
+            this.handler.SourceDirectory = new DirectoryInfo(@"z:\some-non-existing-directory");
+
+            var result = await this.handler.InvokeAsync(invocationContext);
+
+            Assert.That(result, Is.EqualTo(-1));
         }
     }
 }

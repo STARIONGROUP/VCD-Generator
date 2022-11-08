@@ -56,8 +56,8 @@ namespace VCD.Generator.Services
         /// <summary>
         /// Reads the <see cref="Requirement"/>s from the specified file fileName
         /// </summary>
-        /// <param name="fileName">
-        /// The fileName to the requirements input file
+        /// <param name="fileInfo">
+        /// The <see cref="FileInfo"/> to the requirements input file
         /// </param>
         /// <param name="sheetName">
         /// The name of the sheet where the requirements are located, in case this is null the first sheet in the
@@ -73,9 +73,9 @@ namespace VCD.Generator.Services
         /// <returns>
         /// An <see cref="IEnumerable{Requirement}"/>
         /// </returns>
-        public IEnumerable<Requirement> Read(string fileName, string sheetName = null, string identifierColumnName = null, string textColumnName = null)
+        public IEnumerable<Requirement> Read(FileInfo fileInfo, string sheetName = null, string identifierColumnName = null, string textColumnName = null)
         {
-            using var fs = File.OpenRead(fileName);
+            using var fs = fileInfo.OpenRead();
             var wb = new XLWorkbook(fs);
 
             IXLWorksheet requirementsSheet;

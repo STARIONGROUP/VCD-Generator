@@ -186,6 +186,25 @@ namespace VCD.Generator.Commands
             /// </returns>
             public async Task<int> InvokeAsync(InvocationContext context)
             {
+                if (!this.NoLogo)
+                {
+                    AnsiConsole.Markup($"[blue]{ResourceLoader.QueryLogo()}[/]");
+                }
+
+                if (!this.RequirementsFile.Exists)
+                {
+                    AnsiConsole.MarkupLine($"[red]The specified requirements file does not exist[/]");
+                    AnsiConsole.MarkupLine($"[red]{this.RequirementsFile.FullName}[/]");
+                    return -1;
+                }
+
+                if (!this.SourceDirectory.Exists)
+                {
+                    AnsiConsole.MarkupLine($"[red]The specified test case source directory does not exist[/]");
+                    AnsiConsole.MarkupLine($"[red]{this.SourceDirectory.FullName}[/]");
+                    return -1;
+                }
+
                 try
                 {
                     await AnsiConsole.Status()
@@ -193,17 +212,12 @@ namespace VCD.Generator.Commands
                         .SpinnerStyle(Style.Parse("green bold"))
                         .Start("Getting ready for takeoff...", ctx =>
                         {
-                            if (!this.NoLogo)
-                            {
-                                AnsiConsole.Markup($"[blue]{ResourceLoader.QueryLogo()}[/]");
-                            }
-
                             ctx.Status("Reading Requirements...");
-                            var requirements = this.requirementsReader.Read(this.RequirementsFile.FullName);
+                            var requirements = this.requirementsReader.Read(this.RequirementsFile);
                             AnsiConsole.MarkupLine($"[grey]LOG:[/] A total of [bold]{requirements.Count()}[/] requirements were read");
 
                             ctx.Status("Reading NUnit Test Results...");
-                            var testCases = this.resultReader.Read(this.SourceDirectory.FullName);
+                            var testCases = this.resultReader.Read(this.SourceDirectory);
                             AnsiConsole.MarkupLine($"[grey]LOG:[/] A total of [bold]{testCases.Count()} [/] test cases were read");
 
                             ctx.Status($"Matching [green]{requirements.Count()}[/] requirements to [red]{testCases.Count()}[/] test cases...");
@@ -211,16 +225,17 @@ namespace VCD.Generator.Commands
 
                             ctx.Status($"Generating report");
                             this.reportGenerator.Generate(requirements, this.OutputReport.FullName, ReportKind.SpreadSheet);
-                            AnsiConsole.MarkupLine($"[grey]LOG:[/] VCD report generated at [bold] {this.OutputReport.FullName} [/]");
+                            AnsiConsole.MarkupLine($"[grey]LOG:[/] VCD report generated at [bold]{this.OutputReport.FullName}[/]");
                             
                             return Task.FromResult(0);
                         });
                 }
                 catch (Exception ex)
                 {
-                    const string message = "An exception occurred, please report an issue at " +
-                                        "https://github.com/RHEAGROUP/VCD-Generator/issues";
-                    AnsiConsole.WriteLine(message);
+                    AnsiConsole.WriteLine();
+                    AnsiConsole.MarkupLine("[red]An exception occurred, please report an issue at[/]"); 
+                    AnsiConsole.MarkupLine("[link] https://github.com/RHEAGROUP/VCD-Generator/issues [/]");
+                    AnsiConsole.WriteLine();
                     AnsiConsole.WriteException(ex);
 
                     this.logger.LogError(ex, "`VCD Generator Failed");

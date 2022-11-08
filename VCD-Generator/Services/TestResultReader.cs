@@ -53,25 +53,25 @@ namespace VCD.Generator.Services
         /// Asynchronously reads the <see cref="TestCase"/>s from the results file in
         /// the specified Directory and sub Directories
         /// </summary>
-        /// <param name="path">
-        /// The path to the directory from where to start the read
+        /// <param name="directoryInfo">
+        /// The <see cref="DirectoryInfo"/> from where to recursively read the the test results filr
         /// </param>
         /// <returns>
         /// An <see cref="IEnumerable{TestCase}"/>
         /// </returns>
-        public IEnumerable<TestCase> Read(string path)
+        public IEnumerable<TestCase> Read(DirectoryInfo directoryInfo)
         {
-            var files = Directory.GetFiles(path, "*.Result.xml", SearchOption.AllDirectories);
+            var fileInfos = directoryInfo.GetFiles("*.Result.xml", SearchOption.AllDirectories);
 
-            this.logger.LogDebug("{fileLength} Result files found", files.Length);
+            this.logger.LogDebug("{fileLength} Result files found", fileInfos.Length);
 
             var result = new List<TestCase>();
 
-            foreach (var file in files)
+            foreach (var fileInfo in fileInfos)
             {
-                this.logger.LogDebug("processing: {file}", file);
+                this.logger.LogDebug("processing: {file}", fileInfo);
 
-                var testCases = this.ReadXml(file);
+                var testCases = this.ReadXml(fileInfo.FullName);
 
                 result.AddRange(testCases);
             }
@@ -94,7 +94,7 @@ namespace VCD.Generator.Services
 
             var xmlDocument = new XmlDocument();
             xmlDocument.Load(fileName);
-
+            
             var testCaseNodes = xmlDocument.GetElementsByTagName("test-case");
 
             this.logger.LogDebug("found a total of {testCaseNodesCount} testcases in {fileName}", testCaseNodes.Count, fileName);

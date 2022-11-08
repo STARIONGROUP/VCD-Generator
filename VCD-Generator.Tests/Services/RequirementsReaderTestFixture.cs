@@ -37,7 +37,7 @@ namespace VCD.Generator.Tests.Services
     {
         private RequirementsReader requirementsReader;
 
-        private string requirementsDocumentPath;
+        private FileInfo requirementsDocumentFileInfo;
 
         private ILoggerFactory loggerFactory;
 
@@ -47,7 +47,7 @@ namespace VCD.Generator.Tests.Services
             this.loggerFactory = LoggerFactory.Create(builder =>
                 builder.AddConsole().SetMinimumLevel(LogLevel.Trace));
 
-            this.requirementsDocumentPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "Requirements.xlsx");
+            this.requirementsDocumentFileInfo = new FileInfo(Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "Requirements.xlsx"));
 
             this.requirementsReader = new RequirementsReader(this.loggerFactory);
         }
@@ -55,7 +55,7 @@ namespace VCD.Generator.Tests.Services
         [Test(Description = "Verifies that the RequirementsReader.Read methods returns the expected requirements"), Property("REQUIREMENT-ID", "REQ-02")]
         public void Verify_that_Read_returns_the_expected_requirements()
         {
-            var requriements = this.requirementsReader.Read(this.requirementsDocumentPath).ToList();
+            var requriements = this.requirementsReader.Read(this.requirementsDocumentFileInfo).ToList();
 
             Assert.That(requriements.Count, Is.EqualTo(2));
         }
@@ -63,7 +63,7 @@ namespace VCD.Generator.Tests.Services
         [Test]
         public void Verify_that_Read_with_idcolumn_returns_the_expected_requirements()
         {
-            var requriements = this.requirementsReader.Read(this.requirementsDocumentPath, null, "Identifier").ToList();
+            var requriements = this.requirementsReader.Read(this.requirementsDocumentFileInfo, null, "Identifier").ToList();
 
             Assert.That(requriements.Count, Is.EqualTo(2));
 
@@ -76,7 +76,7 @@ namespace VCD.Generator.Tests.Services
         [Test]
         public void Verify_that_Read_with_idcolumn_and_textcolumn_returns_the_expected_requirements()
         {
-            var requriements = this.requirementsReader.Read(this.requirementsDocumentPath, null, "Identifier", "Requirement Text").ToList();
+            var requriements = this.requirementsReader.Read(this.requirementsDocumentFileInfo, null, "Identifier", "Requirement Text").ToList();
 
             Assert.That(requriements.Count, Is.EqualTo(2));
 

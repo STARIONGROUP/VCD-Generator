@@ -38,7 +38,7 @@ namespace VCD.Generator.Tests.Services
     {
         private TestResultReader testResultReader;
 
-        private string path;
+        private DirectoryInfo directoryInfo;
 
         private ILoggerFactory loggerFactory;
 
@@ -48,7 +48,7 @@ namespace VCD.Generator.Tests.Services
             this.loggerFactory = LoggerFactory.Create(builder => 
                 builder.AddConsole().SetMinimumLevel(LogLevel.Trace));
             
-            this.path = Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data");
+            this.directoryInfo = new DirectoryInfo(Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data"));
 
             this.testResultReader = new TestResultReader(this.loggerFactory);
         }
@@ -56,7 +56,7 @@ namespace VCD.Generator.Tests.Services
         [Test(Description = "Verifies that the TestResultReader.Read methods trows an exception"), Property("REQUIREMENT-ID", "REQ-01")]
         public void Verify_that_Read_throws_exception()
         {
-            var testCases = this.testResultReader.Read(this.path).ToList();
+            var testCases = this.testResultReader.Read(this.directoryInfo).ToList();
 
             Assert.That(testCases.Count, Is.EqualTo(2));
 
