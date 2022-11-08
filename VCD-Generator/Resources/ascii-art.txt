@@ -1,0 +1,15 @@
+﻿
+ ██╗   ██╗ ██████╗██████╗        ██████╗ 
+ ██║   ██║██╔════╝██╔══██╗      ██╔════╝ 
+ ██║   ██║██║     ██║  ██║█████╗██║  ███╗
+ ╚██╗ ██╔╝██║     ██║  ██║╚════╝██║   ██║
+  ╚████╔╝ ╚██████╗██████╔╝      ╚██████╔╝
+   ╚═══╝   ╚═════╝╚═════╝        ╚═════╝ 
+ 
+ Verification Control Document Generator
+
+     copyright 2022 RHEA Group S.A. 
+     https://www.rheagroup.com
+     
+     email: info@rheagroup.com
+     version: VCDGVersion

@@ -28,6 +28,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\ascii-art.txt" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\ascii-art.txt" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
 		<PackageReference Include="System.CommandLine.Hosting" Version="0.4.0-alpha.22272.1" />
 		<PackageReference Include="Serilog" Version="2.12.1-dev-01587" />

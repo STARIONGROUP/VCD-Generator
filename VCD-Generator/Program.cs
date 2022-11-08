@@ -21,15 +21,20 @@
 namespace VCD.Generator
 {
     using System.CommandLine.Builder;
+    using System.CommandLine.Help;
     using System.CommandLine.Hosting;
     using System.CommandLine.Parsing;
+
+    using System.Linq;
 
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
  
     using Serilog;
-    
+    using Spectre.Console;
+
     using VCD.Generator.Commands;
+    using VCD.Generator.Resources;
     using VCD.Generator.Services;
 
     /// <summary>
@@ -78,7 +83,20 @@ namespace VCD.Generator
         {
             var root = new GenerateCommand();
             
-            return new CommandLineBuilder(root);
+            return new CommandLineBuilder(root)
+                .UseHelp(ctx =>
+                {
+                    ctx.HelpBuilder.CustomizeLayout(_ =>
+                        HelpBuilder.Default
+                            .GetLayout()
+                            .Skip(1) // Skip the default command description section.
+                            .Prepend(
+                                _ =>
+                                {
+                                    AnsiConsole.Markup($"[blue]{ResourceLoader.QueryLogo()}[/]");
+                                }
+                            ));
+                });
         }
 
         /// <summary>

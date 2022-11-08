@@ -31,6 +31,7 @@ namespace VCD.Generator.Commands
 
     using Spectre.Console;
 
+    using VCD.Generator.Resources;
     using VCD.Generator.Services;
 
     /// <summary>
@@ -43,6 +44,12 @@ namespace VCD.Generator.Commands
         /// </summary>
         public GenerateCommand() : base("VCD Generator")
         {
+            var noLogoOption = new Option<bool>(
+                name: "--no-logo",
+                description: "Suppress the logo",
+                getDefaultValue: () => false);
+            this.AddOption(noLogoOption);
+
             var requirementsFileOption = new Option<FileInfo>(
                 name: "--requirements-file",
                 description: "The spreadsheet file that contains the requirements that need to be verified",
@@ -135,6 +142,11 @@ namespace VCD.Generator.Commands
             }
 
             /// <summary>
+            /// Gets or sets the value indicating whether the logo should be shown or not
+            /// </summary>
+            public bool NoLogo { get; set; }
+
+            /// <summary>
             /// Gets or sets the <see cref="FileInfo"/> that points to the Requirement file
             /// </summary>
             public FileInfo RequirementsFile { get; set; }
@@ -181,6 +193,11 @@ namespace VCD.Generator.Commands
                         .SpinnerStyle(Style.Parse("green bold"))
                         .Start("Getting ready for takeoff...", ctx =>
                         {
+                            if (!this.NoLogo)
+                            {
+                                AnsiConsole.Markup($"[blue]{ResourceLoader.QueryLogo()}[/]");
+                            }
+
                             ctx.Status("Reading Requirements...");
                             var requirements = this.requirementsReader.Read(this.RequirementsFile.FullName);
                             AnsiConsole.MarkupLine($"[grey]LOG:[/] A total of [bold]{requirements.Count()}[/] requirements were read");
