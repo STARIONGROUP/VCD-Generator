@@ -10,7 +10,7 @@
 		<ToolCommandName>vcdg</ToolCommandName>
 		<PackageOutputPath>./nupkg</PackageOutputPath>
 		<RootNamespace>VCD.Generator</RootNamespace>
-		<Version>1.0.0</Version>
+		<Version>2.0.0</Version>
 		<PackageReleaseNotes>[Initial] release</PackageReleaseNotes>
 	</PropertyGroup>
 
