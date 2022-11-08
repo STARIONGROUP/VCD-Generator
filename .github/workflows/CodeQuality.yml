@@ -45,3 +45,9 @@ jobs:
       
       - name: Run VCD-Generator
         run: vcdg -rf VCD-Generator.Tests/Data/Requirements.xlsx -sd . -o vcd-report.xlsx
+
+      - name: Archive results
+        uses: actions/upload-artifact@v3
+        with:
+          name: vcd-report
+          path: vcd-report.xlsx
