@@ -1,5 +1,5 @@
+
 # VCD-Generator
-The purpose of the VCD Generator is to create Verification Control Documents (reports) that make record of which tests contribute to the verification of a set of Requirements.
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_VCD-Generator&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_VCD-Generator)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_VCD-Generator&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_VCD-Generator)
@@ -12,6 +12,8 @@ The purpose of the VCD Generator is to create Verification Control Documents (re
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_VCD-Generator&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_VCD-Generator)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=RHEAGROUP_VCD-Generator&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=RHEAGROUP_VCD-Generator)
 
+The purpose of the VCD Generator is to create Verification Control Documents (reports) that make record of which tests contribute to the verification of a set of Requirements. The VCD Generator is available on [Nuget](https://www.nuget.org/packages/vcdg) as a dotnet tool called `vcdg`.
+
 The VCD Generator works in combination with NUnit and currently generates reports in 2 forms:
   - Excel Spreadsheet
   - HTML Table
@@ -20,31 +22,7 @@ The VCD Generator needs 2 inputs:
   - Requirements: in tabular form (excel spreadsheet), where one of the columns needs to contain the human readable unique identifier of the requirements.
   - Nunit results: in xml form generated using the `NunitXml.TestLogger` logger
 
-> **Note**
-> The following test command needs to be run to generate the required output
-
-```
-dotnet test VCD-Generator.sln --logger:"nunit;LogFilePath=TestResults/{assembly}.Result.xml" -- NUnit.ShowInternalProperties=true
-```
-
-The NUnit tests that need to be part of the VCD process need to be annotated with a C# attribute that is part of the NUnit framework. Have a look at the following example:
-
-```
-[TestFixture]
-public class ACoolTestFixture()
-{
-  [Test(Description = "a very fancy test"), Property("REQUIREMENT-ID", "REQ-01")]
-  public void Some_fance_test()
-  {
-    // ... test test test
-  }
-} 
-```
-
-> **Note**
-> Make use of the `Property` attribute which provides a key-value pair. For the VCD-Generator to work provide at least the following `Property("REQUIREMENT-ID", "your-requirement-id")`
-
-When the `REQUIREMENT-ID` is matched to a requirement in the input requirements spreadsheet the report will inlcude the testcase results in the report.
+Please read the [Quick Start](https://github.com/RHEAGROUP/VCD-Generator/wiki/Quick-Start) to find out how to use the `vcdg` dotnet tool
 
 ## Build Status
 
