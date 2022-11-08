@@ -31,6 +31,7 @@ namespace VCD.Generator
     using Microsoft.Extensions.Hosting;
  
     using Serilog;
+
     using Spectre.Console;
 
     using VCD.Generator.Commands;
@@ -54,21 +55,20 @@ namespace VCD.Generator
         public static int Main(string[] args)
         {
             var commandLineBuilder = BuildCommandLine()
-                .UseHost(_ => CreateHostBuilder(args), (builder) => builder
-                    .UseSerilog()
-                    .ConfigureServices((hostContext, services) =>
+                .UseHost(_ => Host.CreateDefaultBuilder(args)
+                    .UseSerilog((context, services, loggerConfiguration) => loggerConfiguration
+                        .ReadFrom.Configuration(context.Configuration)
+                    ), builder => builder
+                    .ConfigureServices((hostContext, services) => 
                     {
-                        services.AddTransient<IRequirementsReader, RequirementsReader>();
-                        services.AddTransient<ITestResultReader, TestResultReader>();
-                        services.AddTransient<IMatchMaker, MatchMaker>();
-                        services.AddTransient<IReportGenerator, ReportGenerator>();
-                    })
-                    .UseDefaultServiceProvider((context, options) =>
-                    {
-                        options.ValidateScopes = true;
+                        services.AddSingleton<IRequirementsReader, RequirementsReader>();
+                        services.AddSingleton<ITestResultReader, TestResultReader>();
+                        services.AddSingleton<IMatchMaker, MatchMaker>();
+                        services.AddSingleton<IReportGenerator, ReportGenerator>();
                     })
                     .UseCommandHandler<GenerateCommand, GenerateCommand.Handler>())
-                .UseDefaults().Build();
+                .UseDefaults()
+                .Build();
 
             return commandLineBuilder.Invoke(args);
         }
@@ -98,16 +98,5 @@ namespace VCD.Generator
                             ));
                 });
         }
-
-        /// <summary>
-        /// Creates the default builder
-        /// </summary>
-        /// <param name="args">
-        /// the commandline arguments
-        /// </param>
-        /// <returns>
-        /// The <see cref="IHostBuilder"/>
-        /// </returns>
-        private static IHostBuilder CreateHostBuilder(string[] args) => Host.CreateDefaultBuilder(args);
     }
 }
