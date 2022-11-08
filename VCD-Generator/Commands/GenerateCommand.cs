@@ -18,6 +18,9 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Threading;
+
 namespace VCD.Generator.Commands
 {
     using System;
@@ -57,7 +60,28 @@ namespace VCD.Generator.Commands
             requirementsFileOption.AddAlias("-rf");
             requirementsFileOption.IsRequired = true;
             this.AddOption(requirementsFileOption);
-            
+
+            var requirementsSheetNameOption = new Option<string>(
+                name: "--requirements-sheet-name",
+                description: "The name of the requirements sheet in the spreadsheet file that is to be processed. If left empty then the first sheet in the workbook will be used.");
+            requirementsSheetNameOption.AddAlias("-sn");
+            requirementsSheetNameOption.IsRequired = false;
+            this.AddOption(requirementsSheetNameOption);
+
+            var identifierColumnNameOption = new Option<string>(
+                name:"--requirements-id-column",
+                description: "The name of the table-column that contains the identifier of the requirements. If left empty then the first column with content is used.");
+            identifierColumnNameOption.IsRequired = false;
+            identifierColumnNameOption.AddAlias("-id");
+            this.AddOption(identifierColumnNameOption);
+
+            var textColumnNameOption = new Option<string>(
+                name: "--requirements-text-column",
+                description: "The name of the table-column that contains the text of the requirements. If left empty then the requirement text is ignored.");
+            textColumnNameOption.IsRequired = false;
+            textColumnNameOption.AddAlias("-txt");
+            this.AddOption(textColumnNameOption);
+
             var testResultsFileOption = new Option<DirectoryInfo>(
                 name: "--source-directory",
                 description: "The directory that contains the test result files, this directory is process recursively",
@@ -152,6 +176,21 @@ namespace VCD.Generator.Commands
             public FileInfo RequirementsFile { get; set; }
 
             /// <summary>
+            /// Gets or sets the name of the sheet in the excel workbook that contains the requirements
+            /// </summary>
+            public string RequirementsSheetName { get; set; }
+
+            /// <summary>
+            /// Gets or sets the name of the requirements ID column in the requirements spreadsheet
+            /// </summary>
+            public string RequirementsIdColumn { get; set; }
+
+            /// <summary>
+            /// Gets or sets the name of the requirements text column in the requirements spreadsheet
+            /// </summary>
+            public string RequirementsTextColumn { get; set; }
+
+            /// <summary>
             /// Gets or sets the <see cref="DirectoryInfo"/> (and subfolders) in which the NUnit test results are located
             /// </summary>
             public DirectoryInfo SourceDirectory { get; set; }
@@ -194,14 +233,14 @@ namespace VCD.Generator.Commands
                 if (!this.RequirementsFile.Exists)
                 {
                     AnsiConsole.MarkupLine($"[red]The specified requirements file does not exist[/]");
-                    AnsiConsole.MarkupLine($"[red]{this.RequirementsFile.FullName}[/]");
+                    AnsiConsole.MarkupLine($"[purple]{this.RequirementsFile.FullName}[/]");
                     return -1;
                 }
 
                 if (!this.SourceDirectory.Exists)
                 {
                     AnsiConsole.MarkupLine($"[red]The specified test case source directory does not exist[/]");
-                    AnsiConsole.MarkupLine($"[red]{this.SourceDirectory.FullName}[/]");
+                    AnsiConsole.MarkupLine($"[purple]{this.SourceDirectory.FullName}[/]");
                     return -1;
                 }
 
@@ -210,20 +249,59 @@ namespace VCD.Generator.Commands
                     await AnsiConsole.Status()
                         .AutoRefresh(true)
                         .SpinnerStyle(Style.Parse("green bold"))
-                        .Start("Getting ready for takeoff...", ctx =>
+                        .Start("Preparing Warp Engines...", ctx =>
                         {
-                            ctx.Status("Reading Requirements...");
-                            var requirements = this.requirementsReader.Read(this.RequirementsFile);
-                            AnsiConsole.MarkupLine($"[grey]LOG:[/] A total of [bold]{requirements.Count()}[/] requirements were read");
+                            Thread.Sleep(1500);
 
-                            ctx.Status("Reading NUnit Test Results...");
+                            ctx.Status("Reading Requirements at Warp 2...");
+                            Thread.Sleep(1500);
+                            
+                            IEnumerable<Requirement> requirements;
+
+                            try
+                            {
+                                requirements = this.requirementsReader.Read(
+                                    this.RequirementsFile,
+                                    this.RequirementsSheetName,
+                                    this.RequirementsIdColumn, 
+                                    this.RequirementsTextColumn);
+                                AnsiConsole.MarkupLine($"[grey]LOG:[/] A total of [bold]{requirements.Count()}[/] requirements were read");
+                            }
+                            catch (SheetNotFoundException)
+                            {
+                                AnsiConsole.MarkupLine($"[red]The specified sheet name does not exist[/]");
+                                AnsiConsole.MarkupLine($"[purple]{this.RequirementsSheetName}[/]");
+                                AnsiConsole.MarkupLine($"[blue]Back to Impulse speed[/]");
+
+                                ctx.Status("Dropping to Impulse speed!");
+                                Thread.Sleep(1500);
+
+                                return Task.FromResult(-1);
+                            }
+                            catch (InvalidRequirementsFormatException e)
+                            {
+                                AnsiConsole.MarkupLine($"[red]{e.Message}[/]");
+
+                                ctx.Status("Dropping to Impulse speed!");
+                                Thread.Sleep(1500);
+
+                                return Task.FromResult(-1);
+                            }
+
+                            ctx.Status("Reading NUnit Test Results at Warp 7...");
+                            Thread.Sleep(1500);
+
                             var testCases = this.resultReader.Read(this.SourceDirectory);
                             AnsiConsole.MarkupLine($"[grey]LOG:[/] A total of [bold]{testCases.Count()} [/] test cases were read");
 
-                            ctx.Status($"Matching [green]{requirements.Count()}[/] requirements to [red]{testCases.Count()}[/] test cases...");
+                            ctx.Status($"Matching [green]{requirements.Count()}[/] requirements to [red]{testCases.Count()}[/] test cases at warp 9...");
+                            Thread.Sleep(1500);
+
                             this.matchMaker.Match(requirements, testCases);
 
-                            ctx.Status($"Generating report");
+                            ctx.Status($"Generating report at Warp 11, Captain..., SLOW DOWN!");
+                            Thread.Sleep(1500);
+
                             this.reportGenerator.Generate(requirements, this.OutputReport.FullName, ReportKind.SpreadSheet);
                             AnsiConsole.MarkupLine($"[grey]LOG:[/] VCD report generated at [bold]{this.OutputReport.FullName}[/]");
                             

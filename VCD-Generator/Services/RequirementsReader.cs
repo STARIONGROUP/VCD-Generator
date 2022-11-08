@@ -20,6 +20,7 @@
 
 namespace VCD.Generator.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     
@@ -80,19 +81,16 @@ namespace VCD.Generator.Services
 
             IXLWorksheet requirementsSheet;
 
-            if (sheetName == null)
+            try
             {
-                requirementsSheet = wb.Worksheet(1);
+                requirementsSheet = string.IsNullOrEmpty(sheetName) ? wb.Worksheet(1) : wb.Worksheet(sheetName);
             }
-            else
+            catch (ArgumentException e)
             {
-                requirementsSheet = wb.Worksheet(sheetName);
+                throw new SheetNotFoundException(sheetName);
             }
-
+            
             var results = new List<Requirement>();
-
-            var requirementIdColumnNumber = -1;
-            var requirementTextColumnNumber = -1;
             
             var firstRowUsed = requirementsSheet.FirstRowUsed();
             var lastRowUsed = requirementsSheet.LastRowUsed();
@@ -103,15 +101,24 @@ namespace VCD.Generator.Services
             
             var lastCell = headerRow.LastCellUsed();
             var lastCellColumnNumber = lastCell.Address.ColumnNumber;
-
-            requirementIdColumnNumber = this.QueryColumnNumber(identifierColumnName, headerRow, firstCellColumnNumber, lastCellColumnNumber);
-            requirementTextColumnNumber = this.QueryColumnNumber(textColumnName, headerRow, firstCellColumnNumber, lastCellColumnNumber);
-
+            
+            var requirementIdColumnNumber = identifierColumnName != null ? this.QueryColumnNumber(identifierColumnName, headerRow, firstCellColumnNumber, lastCellColumnNumber) : firstCellColumnNumber;
             if (requirementIdColumnNumber == -1)
             {
-                throw new InvalidRequirementsFormatException($"The identifier column with name {identifierColumnName} could not be found");
+                throw new InvalidRequirementsFormatException($"The identifier column with name \"{identifierColumnName}\" could not be found");
             }
-            
+
+            var requirementTextColumnNumber = -1;
+            if (textColumnName != null)
+            {
+                requirementTextColumnNumber = this.QueryColumnNumber(textColumnName, headerRow, firstCellColumnNumber, lastCellColumnNumber);
+            }
+
+            if (textColumnName != null && requirementTextColumnNumber == -1)
+            {
+                throw new InvalidRequirementsFormatException($"The text column with name \"{textColumnName}\" could not be found");
+            }
+
             for (int i = headerRow.RowNumber() + 1; i < lastRowUsed.RowNumber() + 1; i++)
             {
                 var identifier = requirementsSheet.Cell(i, requirementIdColumnNumber).Value.ToString();
@@ -171,9 +178,8 @@ namespace VCD.Generator.Services
                     }
                 }
             }
-
-            this.logger.LogDebug($"{columnName}: {start}");
-            return start;
+            
+            return -1;
         }
     }
 }
