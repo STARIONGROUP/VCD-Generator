@@ -36,7 +36,7 @@ jobs:
         run: dotnet build VCD-Generator.sln --no-restore /p:ContinuousIntegrationBuild=true
 
       - name: Run Tests and Compute Coverage
-        run: dotnet test VCD-Generator.sln --no-restore --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutput="../CoverageResults/" /p:MergeWith="../CoverageResults/coverage.json" /p:CoverletOutputFormat=\"opencover,json\"
+        run: dotnet test VCD-Generator.sln --no-restore --no-build --verbosity normal --logger:"nunit;LogFilePath=TestResults/{assembly}.Result.xml" -- NUnit.ShowInternalProperties=true  /p:CollectCoverage=true /p:CoverletOutput="../CoverageResults/" /p:MergeWith="../CoverageResults/coverage.json" /p:CoverletOutputFormat=\"opencover,json\"
 
       - name: Sonarqube end
         run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
