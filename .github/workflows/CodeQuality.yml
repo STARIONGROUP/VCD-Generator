@@ -19,7 +19,7 @@ jobs:
           dotnet-version: '6.0.x'
 
       - name: install VCD Generator
-        run: dotnet install --global vcdg
+        run: dotnet tool install --global vcdg
 
       - name: Restore dependencies
         run: dotnet restore VCD-Generator.sln
