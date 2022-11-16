@@ -22,11 +22,16 @@ namespace VCD.Generator.Services
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
+    using System.Linq;
     using System.Text;
 
     using ClosedXML.Excel;
+
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Logging.Abstractions;
+
+    using Spectre.Console;
 
     /// <summary>
     /// The purpose of the <see cref="ReportGenerator"/> is to generate a verification control document
@@ -92,16 +97,16 @@ namespace VCD.Generator.Services
             
             var worksheet = wb.Worksheets.Add($"VCD-{now}");
 
-            worksheet.Cell(1, 1).Value = "REQUIREMENT-ID";
-            worksheet.Cell(1, 2).Value = "REQUIREMENT-TEXT";
-            worksheet.Cell(1, 3).Value = "TESTCASE";
-
-            var i = 2;
-
+            var dataTable = new DataTable();
+            dataTable.Columns.Add("REQUIREMENT-ID", typeof(string));
+            dataTable.Columns.Add("REQUIREMENT-TEXT", typeof(string));
+            dataTable.Columns.Add("TESTCASES", typeof(string));
+            
             foreach (var requirement in requirements)
             {
-                worksheet.Cell(i, 1).Value = requirement.Identifier;
-                worksheet.Cell(i, 2).Value = requirement.Text;
+                var dataRow = dataTable.NewRow();
+                dataRow["REQUIREMENT-ID"] = requirement.Identifier;
+                dataRow["REQUIREMENT-TEXT"] = requirement.Text;
                 
                 var sb = new StringBuilder();
 
@@ -109,12 +114,31 @@ namespace VCD.Generator.Services
                 {
                     sb.AppendLine($"{tc.FullName} - {tc.Result}");
                 }
-                
-                worksheet.Cell(i, 3).Value = sb.ToString();
-                
-                i++;
+
+                dataRow["TESTCASES"] = sb.ToString();
+
+                dataTable.Rows.Add(dataRow);
             }
-            
+
+            worksheet.Cell(1, 1).InsertTable(dataTable, "VCD", true);
+
+            worksheet.Column("A").Style.Alignment.WrapText = false;
+            worksheet.Column("B").Style.Alignment.WrapText = true;
+            worksheet.Column("C").Style.Alignment.WrapText = false;
+
+            worksheet.Column("A").Width = 25;
+            worksheet.Column("B").Width = 80;
+
+            try
+            {
+                worksheet.Rows().AdjustToContents();
+                worksheet.Columns().AdjustToContents();
+            }
+            catch (Exception e)
+            {
+                AnsiConsole.Markup($"[blue]Problem loading fonts[/]: {e.Message}");
+            }
+
             wb.SaveAs(filePath);
         }
 
