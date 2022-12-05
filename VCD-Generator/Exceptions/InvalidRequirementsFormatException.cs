@@ -21,10 +21,12 @@
 namespace VCD.Generator
 {
     using System;
+    using System.Runtime.Serialization;
 
     /// <summary>
     /// The <see cref="InvalidRequirementsFormatException"/> is thrown when the requirements data is in invalid format
     /// </summary>
+    [Serializable]
     public class InvalidRequirementsFormatException : Exception
     {
         /// <summary>
@@ -58,6 +60,20 @@ namespace VCD.Generator
         /// </param>
         public InvalidRequirementsFormatException(string message, Exception inner)
             : base(message, inner)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InvalidRequirementsFormatException"/> class
+        /// </summary>
+        /// <param name="info">
+        /// An instance of <see cref="SerializationInfo"/>
+        /// </param>
+        /// <param name="context">
+        /// An instance of <see cref="StreamingContext"/>
+        /// </param>
+        protected InvalidRequirementsFormatException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
         {
         }
     }

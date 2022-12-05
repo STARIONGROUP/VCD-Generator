@@ -91,6 +91,8 @@ namespace VCD.Generator.Services
         /// </param>
         private void GenerateSpreadsheetReport(IEnumerable<Requirement> requirements, string filePath)
         {
+            this.logger.LogInformation("Creating target workbook");
+
             var wb = new XLWorkbook();
 
             var now = DateTime.UtcNow.ToString("yyyy-MM-dd");
@@ -140,6 +142,7 @@ namespace VCD.Generator.Services
             }
 
             wb.SaveAs(filePath);
+            this.logger.LogInformation($"Target workbook saved to: {filePath}");
         }
 
         /// <summary>

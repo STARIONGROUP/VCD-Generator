@@ -18,6 +18,9 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
+using System;
+using System.CommandLine;
+
 namespace VCD.Generator.Tests.Commands
 {
     using System.Collections.Generic;
@@ -79,6 +82,26 @@ namespace VCD.Generator.Tests.Commands
             this.handler.RequirementsFile = new FileInfo(Path.Combine(TestContext.CurrentContext.TestDirectory, "Data", "Requirements.xlsx"));
             this.handler.SourceDirectory = new DirectoryInfo(TestContext.CurrentContext.WorkDirectory);
             this.handler.OutputReport = new FileInfo(TestContext.CurrentContext.TestDirectory);
+        }
+
+        [Test]
+        public void Verify_that_GenerateCommand_can_be_created_without_exception()
+        {
+            Assert.That(() =>
+            {
+                var command = new GenerateCommand();
+            }, Throws.Nothing );
+        }
+
+        [Test]
+        public void Verify_that_GenerateCommand_Invoke_throws_exception()
+        {
+            var invocationContext = new InvocationContext(null);
+
+            Assert.That(() =>
+            {
+                this.handler.Invoke(invocationContext);
+            }, Throws.TypeOf<NotSupportedException>());
         }
 
         [Test]

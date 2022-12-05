@@ -85,7 +85,7 @@ namespace VCD.Generator.Services
             {
                 requirementsSheet = string.IsNullOrEmpty(sheetName) ? wb.Worksheet(1) : wb.Worksheet(sheetName);
             }
-            catch (ArgumentException e)
+            catch (ArgumentException)
             {
                 throw new SheetNotFoundException(sheetName);
             }
