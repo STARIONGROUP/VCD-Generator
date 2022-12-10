@@ -50,8 +50,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="Data\Requirements.xlsx">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		<None Update="Data\Requirements-01.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Data\Requirements-02.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
 		<None Update="Data\VCD-Generator.Tests.Result.xml">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>

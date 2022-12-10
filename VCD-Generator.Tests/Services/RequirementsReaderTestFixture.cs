@@ -37,7 +37,9 @@ namespace VCD.Generator.Tests.Services
     {
         private RequirementsReader requirementsReader;
 
-        private FileInfo requirementsDocumentFileInfo;
+        private FileInfo requirementsDocumentFileInfo_01;
+
+        private FileInfo requirementsDocumentFileInfo_02;
 
         private ILoggerFactory loggerFactory;
 
@@ -47,43 +49,61 @@ namespace VCD.Generator.Tests.Services
             this.loggerFactory = LoggerFactory.Create(builder =>
                 builder.AddConsole().SetMinimumLevel(LogLevel.Trace));
 
-            this.requirementsDocumentFileInfo = new FileInfo(Path.Combine(TestContext.CurrentContext.WorkDirectory, "Data", "Requirements.xlsx"));
+            this.requirementsDocumentFileInfo_01 = new FileInfo(Path.Combine(TestContext.CurrentContext.WorkDirectory,
+                "Data", "Requirements-01.xlsx"));
+
+            this.requirementsDocumentFileInfo_02 = new FileInfo(Path.Combine(TestContext.CurrentContext.WorkDirectory,
+                "Data", "Requirements-02.xlsx"));
 
             this.requirementsReader = new RequirementsReader(this.loggerFactory);
         }
 
-        [Test(Description = "Verifies that the RequirementsReader.Read methods returns the expected requirements"), Property("REQUIREMENT-ID", "REQ-02")]
-        public void Verify_that_Read_returns_the_expected_requirements()
+        [Test(Description = "Verifies that the RequirementsReader.Read methods returns the expected requirements"),
+         Property("REQUIREMENT-ID", "REQ-02")]
+        public void Verify_that_Read_requirementsDocumentFileInfo_01_returns_the_expected_requirements()
         {
-            var requriements = this.requirementsReader.Read(this.requirementsDocumentFileInfo).ToList();
+            var requirements = this.requirementsReader.Read(this.requirementsDocumentFileInfo_01).ToList();
 
-            Assert.That(requriements.Count, Is.EqualTo(2));
+            Assert.That(requirements.Count, Is.EqualTo(2));
         }
 
         [Test]
-        public void Verify_that_Read_with_idcolumn_returns_the_expected_requirements()
+        public void Verify_that_Read_requirementsDocumentFileInfo_01_with_idcolumn_returns_the_expected_requirements()
         {
-            var requriements = this.requirementsReader.Read(this.requirementsDocumentFileInfo, null, "Identifier").ToList();
+            var requirements = this.requirementsReader.Read(this.requirementsDocumentFileInfo_01, null, "Identifier")
+                .ToList();
 
-            Assert.That(requriements.Count, Is.EqualTo(2));
+            Assert.That(requirements.Count, Is.EqualTo(2));
 
-            var requirement = requriements.First();
+            var requirement = requirements.First();
 
             Assert.That(requirement.Identifier, Is.EqualTo("REQ-01"));
             Assert.That(requirement.Text, Is.EqualTo(""));
         }
 
         [Test]
-        public void Verify_that_Read_with_idcolumn_and_textcolumn_returns_the_expected_requirements()
+        public void Verify_that_Read_requirementsDocumentFileInfo_01_with_idcolumn_and_textcolumn_returns_the_expected_requirements()
         {
-            var requriements = this.requirementsReader.Read(this.requirementsDocumentFileInfo, null, "Identifier", "Requirement Text").ToList();
+            var requirements = this.requirementsReader
+                .Read(this.requirementsDocumentFileInfo_01, null, "Identifier", "Requirement Text").ToList();
 
-            Assert.That(requriements.Count, Is.EqualTo(2));
+            Assert.That(requirements.Count, Is.EqualTo(2));
 
-            var requirement = requriements.First();
+            var requirement = requirements.First();
 
             Assert.That(requirement.Identifier, Is.EqualTo("REQ-01"));
-            Assert.That(requirement.Text, Is.EqualTo("The VCD Generator shall read the test results created by the NunitXml.TestLogger in the Nunit3 output format"));
+            Assert.That(requirement.Text,
+                Is.EqualTo(
+                    "The VCD Generator shall read the test results created by the NunitXml.TestLogger in the Nunit3 output format"));
+        }
+
+        [Test]
+        public void Verify_that_Read_requirementsDocumentFileInfo_02_with_idcolumn_and_textcolumn_returns_the_expected_requirements()
+        {
+            var requirements = this.requirementsReader
+                .Read(this.requirementsDocumentFileInfo_02, null, "Identifier", "Requirement Text").ToList();
+
+            Assert.That(requirements.Count, Is.EqualTo(2));
         }
     }
 }

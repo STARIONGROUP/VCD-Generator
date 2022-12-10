@@ -95,14 +95,14 @@ namespace VCD.Generator.Services
             var firstRowUsed = requirementsSheet.FirstRowUsed();
             var lastRowUsed = requirementsSheet.LastRowUsed();
             var headerRow = firstRowUsed.RowUsed();
-            
+
             var firstCell = headerRow.FirstCellUsed();
             var firstCellColumnNumber = firstCell.Address.ColumnNumber;
             
             var lastCell = headerRow.LastCellUsed();
             var lastCellColumnNumber = lastCell.Address.ColumnNumber;
             
-            var requirementIdColumnNumber = identifierColumnName != null ? this.QueryColumnNumber(identifierColumnName, headerRow, firstCellColumnNumber, lastCellColumnNumber) : firstCellColumnNumber;
+            var requirementIdColumnNumber = identifierColumnName != null ? this.QueryColumnNumber(identifierColumnName, requirementsSheet, headerRow.RowNumber(), firstCellColumnNumber, lastCellColumnNumber) : firstCellColumnNumber;
             if (requirementIdColumnNumber == -1)
             {
                 throw new InvalidRequirementsFormatException($"The identifier column with name \"{identifierColumnName}\" could not be found");
@@ -111,7 +111,7 @@ namespace VCD.Generator.Services
             var requirementTextColumnNumber = -1;
             if (textColumnName != null)
             {
-                requirementTextColumnNumber = this.QueryColumnNumber(textColumnName, headerRow, firstCellColumnNumber, lastCellColumnNumber);
+                requirementTextColumnNumber = this.QueryColumnNumber(textColumnName, requirementsSheet, headerRow.RowNumber(), firstCellColumnNumber, lastCellColumnNumber);
             }
 
             if (textColumnName != null && requirementTextColumnNumber == -1)
@@ -135,7 +135,7 @@ namespace VCD.Generator.Services
 
                     var requirement = new Requirement
                     {
-                        Identifier = identifier,
+                        Identifier = identifier.Trim(),
                         Text = text
                     };
 
@@ -152,6 +152,9 @@ namespace VCD.Generator.Services
         /// <param name="columnName">
         /// the name of the column that is being queried
         /// </param>
+        /// <param name="requirementsSheet">
+        /// The <see cref="IXLWorksheet"/> from which the data is queried
+        /// </param>
         /// <param name="row">
         /// the row in which the data is queried
         /// </param>
@@ -161,20 +164,23 @@ namespace VCD.Generator.Services
         /// <param name="end">
         /// the ending cell in the row
         /// </param>
-        /// <returns></returns>
-        private int QueryColumnNumber(string columnName, IXLRangeRow row, int start, int end)
+        /// <returns>
+        /// returns the column number in which the <paramref name="columnName"/> is found. -1 if not found
+        /// </returns>
+        private int QueryColumnNumber(string columnName, IXLWorksheet requirementsSheet, int row, int start, int end)
         {
             if (columnName != null)
             {
-                for (int i = start - 1; i < end; i++)
+                for (int i = start; i < end; i++)
                 {
-                    var activeCell = row.Cell(i);
+                    var activeCell = requirementsSheet.Cell(row, i);
+                    
                     var activeCellValue = activeCell.Value.ToString();
 
-                    if (activeCellValue == columnName)
+                    if (activeCellValue ==  columnName.Trim())
                     {
                         this.logger.LogDebug($"{columnName}: {i}");
-                        return i + 1;
+                        return i;
                     }
                 }
             }

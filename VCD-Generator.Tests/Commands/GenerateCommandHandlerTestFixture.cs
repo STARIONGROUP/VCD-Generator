@@ -18,11 +18,9 @@
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
-using System;
-using System.CommandLine;
-
 namespace VCD.Generator.Tests.Commands
 {
+    using System;
     using System.Collections.Generic;
     using System.CommandLine.Invocation;
     using System.IO;
@@ -79,7 +77,7 @@ namespace VCD.Generator.Tests.Commands
                 this.reportGenerator.Object,
                 this.logger.Object);
 
-            this.handler.RequirementsFile = new FileInfo(Path.Combine(TestContext.CurrentContext.TestDirectory, "Data", "Requirements.xlsx"));
+            this.handler.RequirementsFile = new FileInfo(Path.Combine(TestContext.CurrentContext.TestDirectory, "Data", "Requirements-01.xlsx"));
             this.handler.SourceDirectory = new DirectoryInfo(TestContext.CurrentContext.WorkDirectory);
             this.handler.OutputReport = new FileInfo(TestContext.CurrentContext.TestDirectory);
         }

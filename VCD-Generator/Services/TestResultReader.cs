@@ -97,7 +97,7 @@ namespace VCD.Generator.Services
             
             var testCaseNodes = xmlDocument.GetElementsByTagName("test-case");
 
-            this.logger.LogDebug("found a total of {testCaseNodesCount} testcases in {fileName}", testCaseNodes.Count, fileName);
+            this.logger.LogDebug("found a total of {testCaseNodesCount} test-cases in {fileName}", testCaseNodes.Count, fileName);
 
             foreach (XmlNode testCaseNode in testCaseNodes)
             {

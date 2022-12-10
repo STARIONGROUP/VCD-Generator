@@ -18,10 +18,9 @@
 //  </copyright>
 //  -------------------------------------------------------------------------------------------------
 
-using System;
-
 namespace VCD.Generator.Resources
 {
+    using System;
     using System.IO;
     using System.Reflection;
     using System.Resources;
