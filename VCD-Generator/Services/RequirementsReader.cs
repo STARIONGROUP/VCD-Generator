@@ -179,7 +179,7 @@ namespace VCD.Generator.Services
 
                     if (activeCellValue ==  columnName.Trim())
                     {
-                        this.logger.LogDebug($"{columnName}: {i}");
+                        this.logger.LogDebug("{columnName}: {i}", columnName, i);
                         return i;
                     }
                 }

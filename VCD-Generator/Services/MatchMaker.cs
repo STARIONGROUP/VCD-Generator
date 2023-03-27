@@ -67,7 +67,7 @@ namespace VCD.Generator.Services
                 {
                     if (testCase.RequirementId.Contains(requirement.Identifier))
                     {
-                        this.logger.LogDebug($"TestCase {testCase.FullName} matched to requirement {requirement.Identifier}");
+                        this.logger.LogDebug("TestCase {testCase-FullName} matched to requirement {requirement-Identifier}", testCase.FullName, requirement.Identifier);
 
                         requirement.TestCases.Add(testCase);
                     }

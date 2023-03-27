@@ -141,7 +141,7 @@ namespace VCD.Generator.Services
             }
 
             wb.SaveAs(filePath);
-            this.logger.LogInformation($"Target workbook saved to: {filePath}");
+            this.logger.LogInformation("Target workbook saved to: {filePath}", filePath);
         }
 
         /// <summary>
