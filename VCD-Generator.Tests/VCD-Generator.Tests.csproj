@@ -3,7 +3,7 @@
 	<PropertyGroup Label="Copyright">
 		<Company>RHEA System S.A.</Company>
 		<Authors>Sam Gerené, Alexander van Delft</Authors>
-		<Copyright>Copyright 2022 RHEA System S.A.</Copyright>
+		<Copyright>Copyright 2022-2023 RHEA System S.A.</Copyright>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 	</PropertyGroup>
 
