@@ -9,7 +9,7 @@
 
 	<PropertyGroup Label="Package">
 		<Description>Nunit test suite for the VCD.Generator library</Description>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<RootNamespace>VCD.Generator.Tests</RootNamespace>
 		<ImplicitUsings>false</ImplicitUsings>
 		<Nullable>disable</Nullable>
@@ -23,17 +23,17 @@
 	</PropertyGroup>
 
 	<ItemGroup Label="Test">
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
 		<PackageReference Include="NUnit" Version="3.13.3" />
 		<PackageReference Include="NUnit.Console" Version="3.16.3" />
-		<PackageReference Include="NUnit3TestAdapter" Version="4.4.2" />
-		<PackageReference Include="NunitXml.TestLogger" Version="3.0.131" />
+		<PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+		<PackageReference Include="NunitXml.TestLogger" Version="3.1.15" />
 		<PackageReference Include="Moq" Version="4.18.4" />
-		<PackageReference Include="coverlet.collector" Version="3.2.0">
+		<PackageReference Include="coverlet.collector" Version="6.0.0">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="coverlet.msbuild" Version="3.2.0">
+		<PackageReference Include="coverlet.msbuild" Version="6.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
