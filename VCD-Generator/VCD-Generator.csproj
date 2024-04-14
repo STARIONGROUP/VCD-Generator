@@ -3,7 +3,7 @@
     <PropertyGroup Label="Package">
         <Title>VCD Generator</Title>
         <Description>A Verification Control Document (VCD) generator.</Description>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <OutputType>Exe</OutputType>
         <PackAsTool>true</PackAsTool>
         <PackageId>vcdg</PackageId>
@@ -19,7 +19,7 @@
 
     <PropertyGroup Label="Copyright">
         <Company>RHEA System S.A.</Company>
-        <Copyright>Copyright 2022-2023 RHEA System S.A.</Copyright>
+        <Copyright>Copyright 2022-2024 RHEA System S.A.</Copyright>
         <Authors>Sam Gerené, Alexander van Delft</Authors>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
@@ -41,15 +41,15 @@
     <ItemGroup>
         <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
         <PackageReference Include="System.CommandLine.Hosting" Version="0.4.0-alpha.22272.1" />
-        <PackageReference Include="Serilog" Version="3.0.1" />
+        <PackageReference Include="Serilog" Version="3.1.1" />
         <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
-        <PackageReference Include="Serilog.Extensions.Hosting" Version="7.0.0" />
-        <PackageReference Include="Serilog.Settings.Configuration" Version="7.0.0" />
-        <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
-        <PackageReference Include="Spectre.Console" Version="0.47.0" />
-        <PackageReference Include="ClosedXML" Version="0.102.0" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1" />
+        <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
+        <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
+        <PackageReference Include="Spectre.Console" Version="0.48.0" />
+        <PackageReference Include="ClosedXML" Version="0.102.2" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
     </ItemGroup>
 
     <ItemGroup>
