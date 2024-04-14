@@ -10,10 +10,9 @@
         <ToolCommandName>vcdg</ToolCommandName>
         <PackageOutputPath>./nupkg</PackageOutputPath>
         <RootNamespace>VCD.Generator</RootNamespace>
-        <Version>4.0.0</Version>
+        <Version>5.0.0</Version>
         <PackageReleaseNotes>
-            [Update] dependencies (Spectre.Console, ClosedXML)
-            [SQ] improvements
+            [Update] dependencies, target net8.0
         </PackageReleaseNotes>
     </PropertyGroup>
 
