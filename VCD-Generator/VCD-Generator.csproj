@@ -10,16 +10,18 @@
         <ToolCommandName>vcdg</ToolCommandName>
         <PackageOutputPath>./nupkg</PackageOutputPath>
         <RootNamespace>VCD.Generator</RootNamespace>
-        <Version>5.0.1</Version>
+        <Version>6.0.0</Version>
         <PackageReleaseNotes>
-            [Update] dependencies, target net8.0
+            [Update] Starion Group
+            [Update] dependencies
         </PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>starion-s-symbol-main1-rgb.png</PackageIcon>
     </PropertyGroup>
 
     <PropertyGroup Label="Copyright">
-        <Company>RHEA System S.A.</Company>
-        <Copyright>Copyright 2022-2024 RHEA System S.A.</Copyright>
+        <Company>Starion Group S.A.</Company>
+        <Copyright>Copyright 2022-2024 Starion Group S.A.</Copyright>
         <Authors>Sam Gerené, Alexander van Delft</Authors>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
@@ -27,7 +29,7 @@
 
     <PropertyGroup Label="Repository">
         <RepositoryType>Git</RepositoryType>
-        <RepositoryUrl>https://github.com/RHEAGROUP/VCD-Generator.git</RepositoryUrl>
+        <RepositoryUrl>https://github.com/STARIONGROUP/VCD-Generator.git</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
@@ -46,7 +48,7 @@
         <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
         <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.0" />
         <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
-        <PackageReference Include="Spectre.Console" Version="0.48.0" />
+        <PackageReference Include="Spectre.Console" Version="0.49.1" />
         <PackageReference Include="ClosedXML" Version="0.102.2" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
@@ -60,6 +62,7 @@
 
     <ItemGroup>
         <None Include="..\README.md" Pack="true" PackagePath="\" />
+        <None Include="..\starion-s-symbol-main1-rgb.png" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 </Project>

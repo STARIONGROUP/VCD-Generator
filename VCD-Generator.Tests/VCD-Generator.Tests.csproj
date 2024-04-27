@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup Label="Copyright">
-		<Company>RHEA System S.A.</Company>
+		<Company>Starion Group S.A.</Company>
 		<Authors>Sam Gerené, Alexander van Delft</Authors>
-		<Copyright>Copyright 2022-2024 RHEA System S.A.</Copyright>
+		<Copyright>Copyright 2022-2024 Starion Group S.A.</Copyright>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 	</PropertyGroup>
 
@@ -19,7 +19,7 @@
 
 	<PropertyGroup Label="Repository">
 		<RepositoryType>Git</RepositoryType>
-		<RepositoryUrl>https://github.com/RHEAGROUP/VCD-Generator.git</RepositoryUrl>
+		<RepositoryUrl>https://github.com/STARIONGROUP/VCD-Generator.git</RepositoryUrl>
 	</PropertyGroup>
 
 	<ItemGroup Label="Test">

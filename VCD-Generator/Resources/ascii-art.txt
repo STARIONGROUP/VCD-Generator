@@ -8,9 +8,9 @@
  
  Verification Control Document Generator
 
-     copyright 2022 RHEA Group S.A. 
-     https://www.rheagroup.com
+     copyright 2022-2024 Starion Group S.A. 
+     https://www.stariongroup.eu
      
-     email: info@rheagroup.com
+     email: info@stariongroup.eu
      version: VCDGVersion
 

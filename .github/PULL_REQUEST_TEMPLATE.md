@@ -1,8 +1,8 @@
 ### Prerequisites
 
 - [ ] I have written a descriptive pull-request title
-- [ ] I have verified that there are no overlapping [pull-requests](https://github.com/RHEAGROUP/VCD-Generator/pulls) open
-- [ ] I have verified that I am following the VCD-Generator [code style guidelines](https://raw.githubusercontent.com/RHEAGROUP/VCD-Generator/master/.github/CONTRIBUTING.md)
+- [ ] I have verified that there are no overlapping [pull-requests](https://github.com/STARIONGROUP/VCD-Generator/pulls) open
+- [ ] I have verified that I am following the VCD-Generator [code style guidelines](https://raw.githubusercontent.com/STARIONGROUP/VCD-Generator/master/.github/CONTRIBUTING.md)
 - [ ] I have provided test coverage for my change (where applicable)
 
 ### Description
