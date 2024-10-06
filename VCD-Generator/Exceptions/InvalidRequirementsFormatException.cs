@@ -25,7 +25,6 @@ namespace VCD.Generator
     /// <summary>
     /// The <see cref="InvalidRequirementsFormatException"/> is thrown when the requirements data is in invalid format
     /// </summary>
-    [Serializable]
     public class InvalidRequirementsFormatException : Exception
     {
         /// <summary>

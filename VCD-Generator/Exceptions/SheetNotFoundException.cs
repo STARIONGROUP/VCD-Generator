@@ -26,7 +26,6 @@ namespace VCD.Generator
     /// The <see cref="SheetNotFoundException"/> is thrown when the sheet with a specific name
     /// does not exist in the requirements spreadsheet
     /// </summary>
-    [Serializable]
     public class SheetNotFoundException : Exception
     {
         /// <summary>
