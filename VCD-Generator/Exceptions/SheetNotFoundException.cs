@@ -21,8 +21,7 @@
 namespace VCD.Generator
 {
     using System;
-    using System.Runtime.Serialization;
-
+    
     /// <summary>
     /// The <see cref="SheetNotFoundException"/> is thrown when the sheet with a specific name
     /// does not exist in the requirements spreadsheet
@@ -61,20 +60,6 @@ namespace VCD.Generator
         /// </param>
         public SheetNotFoundException(string message, Exception inner)
             : base(message, inner)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SheetNotFoundException"/> class
-        /// </summary>
-        /// <param name="info">
-        /// An instance of <see cref="SerializationInfo"/>
-        /// </param>
-        /// <param name="context">
-        /// An instance of <see cref="StreamingContext"/>
-        /// </param>
-        protected SheetNotFoundException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
         {
         }
     }
