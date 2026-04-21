@@ -3,7 +3,7 @@
     <PropertyGroup Label="Package">
         <Title>VCD Generator</Title>
         <Description>A Verification Control Document (VCD) generator.</Description>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
         <OutputType>Exe</OutputType>
         <PackAsTool>true</PackAsTool>
         <PackageId>vcdg</PackageId>
