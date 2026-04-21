@@ -107,17 +107,15 @@ namespace VCD.Generator.Tests.Services
             Assert.That(requirements.Count, Is.EqualTo(2));
         }
 
-        [Test(Description = "Documents current behaviour: the rightmost header column is not reachable by the column scan")]
-        public void Verify_that_Read_fails_when_text_column_is_located_in_the_last_used_column_of_the_header_row()
+        [Test(Description = "Regression: the rightmost header column must be reachable by the column scan")]
+        public void Verify_that_Read_finds_a_text_column_located_in_the_last_used_column_of_the_header_row()
         {
             // "Comments" is the rightmost populated header in Requirements-01.xlsx
-            // (column 13, equal to LastCellUsed().Address.ColumnNumber). The scan in
-            // QueryColumnNumber terminates one column short of it and returns -1.
-            Assert.That(
-                () => this.requirementsReader
-                    .Read(this.requirementsDocumentFileInfo_01, null, "Identifier", "Comments").ToList(),
-                Throws.TypeOf<InvalidRequirementsFormatException>()
-                    .With.Message.Contains("Comments"));
+            // (column 13, equal to LastCellUsed().Address.ColumnNumber).
+            var requirements = this.requirementsReader
+                .Read(this.requirementsDocumentFileInfo_01, null, "Identifier", "Comments").ToList();
+
+            Assert.That(requirements.Count, Is.EqualTo(2));
         }
     }
 }
