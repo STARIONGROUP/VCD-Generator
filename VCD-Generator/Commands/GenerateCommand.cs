@@ -76,6 +76,12 @@ namespace VCD.Generator.Commands
         public Option<FileInfo> OutputReportOption { get; }
 
         /// <summary>
+        /// The <see cref="Option{T}"/> that controls whether an aggregated, colour-coded
+        /// <c>STATUS</c> column is appended to the report.
+        /// </summary>
+        public Option<bool> AddStatusColumnOption { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="GenerateCommand"/>
         /// </summary>
         public GenerateCommand() : base("VCD Generator")
@@ -127,6 +133,12 @@ namespace VCD.Generator.Commands
                 Required = true,
             };
             this.Options.Add(this.OutputReportOption);
+
+            this.AddStatusColumnOption = new Option<bool>("--add-status-column", "-st")
+            {
+                Description = "When set, appends a STATUS column to the report with an aggregated, colour-coded per-requirement outcome (empty = uncovered, Passed = green, Failed = red, Mixed = orange, Inconclusive = grey). Default: false.",
+            };
+            this.Options.Add(this.AddStatusColumnOption);
         }
 
         /// <summary>
@@ -147,6 +159,7 @@ namespace VCD.Generator.Commands
             handler.RequirementsTextColumn = parseResult.GetValue(this.RequirementsTextColumnOption);
             handler.SourceDirectory = parseResult.GetValue(this.SourceDirectoryOption);
             handler.OutputReport = parseResult.GetValue(this.OutputReportOption);
+            handler.AddStatusColumn = parseResult.GetValue(this.AddStatusColumnOption);
         }
 
         /// <summary>
@@ -247,6 +260,12 @@ namespace VCD.Generator.Commands
             public FileInfo OutputReport { get; set; }
 
             /// <summary>
+            /// Gets or sets a value indicating whether an aggregated, colour-coded <c>STATUS</c>
+            /// column is appended to the report.
+            /// </summary>
+            public bool AddStatusColumn { get; set; }
+
+            /// <summary>
             /// Asynchronously executes the command
             /// </summary>
             /// <returns>
@@ -331,7 +350,7 @@ namespace VCD.Generator.Commands
                             ctx.Status($"Generating report at Warp 11, Captain..., SLOW DOWN!");
                             Thread.Sleep(1500);
 
-                            this.reportGenerator.Generate(requirements, this.OutputReport.FullName, ReportKind.SpreadSheet);
+                            this.reportGenerator.Generate(requirements, this.OutputReport.FullName, ReportKind.SpreadSheet, this.AddStatusColumn);
                             AnsiConsole.MarkupLine($"[grey]LOG:[/] VCD report generated at [bold]{this.OutputReport.FullName}[/]");
 
                             return Task.FromResult(0);

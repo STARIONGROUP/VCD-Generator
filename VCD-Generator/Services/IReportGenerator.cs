@@ -35,11 +35,17 @@ namespace VCD.Generator.Services
         /// The <see cref="Requirement"/> objects on the basis of which the report will be generated
         /// </param>
         /// <param name="filePath">
-        /// the file path(including file-name) where the report will be generated 
+        /// the file path(including file-name) where the report will be generated
         /// </param>
         /// <param name="reportKind">
         /// The kind of report that is generated
         /// </param>
-        void Generate(IEnumerable<Requirement> requirements, string filePath, ReportKind reportKind);
+        /// <param name="addStatusColumn">
+        /// When <c>true</c>, an additional <c>STATUS</c> column is written to the report with an
+        /// aggregated per-requirement outcome (empty / Passed / Failed / Mixed / Inconclusive) and
+        /// a matching background colour on the cell. Defaults to <c>false</c> to preserve the
+        /// pre-existing report schema.
+        /// </param>
+        void Generate(IEnumerable<Requirement> requirements, string filePath, ReportKind reportKind, bool addStatusColumn = false);
     }
 }

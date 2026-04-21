@@ -106,7 +106,7 @@ namespace VCD.Generator.Tests.Commands
                 x => x.Match(It.IsAny<IEnumerable<Requirement>>(), It.IsAny<IEnumerable<TestCase>>()),
                 Times.Once);
 
-            this.reportGenerator.Verify(x => x.Generate(It.IsAny<IEnumerable<Requirement>>(), It.IsAny<string>(), ReportKind.SpreadSheet),
+            this.reportGenerator.Verify(x => x.Generate(It.IsAny<IEnumerable<Requirement>>(), It.IsAny<string>(), ReportKind.SpreadSheet, It.IsAny<bool>()),
                 Times.Once);
             
             Assert.That(result, Is.EqualTo(0));

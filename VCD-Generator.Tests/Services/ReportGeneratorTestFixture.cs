@@ -119,5 +119,60 @@ namespace VCD.Generator.Tests.Services
             Assert.That(() => this.reportGenerator.Generate(this.requirements, this.spreadsheetReportPath, ReportKind.Html),
                 Throws.TypeOf<NotImplementedException>());
         }
+
+        [Test]
+        public void Verify_that_spreadsheet_report_is_generated_with_status_column()
+        {
+            Assert.That(() => this.reportGenerator.Generate(this.requirements, this.spreadsheetReportPath, ReportKind.SpreadSheet, addStatusColumn: true),
+                Throws.Nothing);
+        }
+
+        [Test]
+        public void Verify_that_DeriveStatus_returns_empty_for_uncovered_requirement()
+        {
+            var requirement = new Requirement { Identifier = "REQ-99" };
+
+            Assert.That(ReportGenerator.DeriveStatus(requirement), Is.EqualTo(string.Empty));
+        }
+
+        [Test]
+        public void Verify_that_DeriveStatus_returns_Passed_when_every_test_case_is_Passed()
+        {
+            var requirement = new Requirement { Identifier = "REQ-99" };
+            requirement.TestCases.Add(new TestCase { FullName = "T1", Result = "Passed" });
+            requirement.TestCases.Add(new TestCase { FullName = "T2", Result = "Passed" });
+
+            Assert.That(ReportGenerator.DeriveStatus(requirement), Is.EqualTo("Passed"));
+        }
+
+        [Test]
+        public void Verify_that_DeriveStatus_returns_Failed_when_any_test_case_is_Failed()
+        {
+            var requirement = new Requirement { Identifier = "REQ-99" };
+            requirement.TestCases.Add(new TestCase { FullName = "T1", Result = "Passed" });
+            requirement.TestCases.Add(new TestCase { FullName = "T2", Result = "Failed" });
+
+            Assert.That(ReportGenerator.DeriveStatus(requirement), Is.EqualTo("Failed"));
+        }
+
+        [Test]
+        public void Verify_that_DeriveStatus_returns_Mixed_when_Passed_mixes_with_non_Passed_non_Failed()
+        {
+            var requirement = new Requirement { Identifier = "REQ-99" };
+            requirement.TestCases.Add(new TestCase { FullName = "T1", Result = "Passed" });
+            requirement.TestCases.Add(new TestCase { FullName = "T2", Result = "Inconclusive" });
+
+            Assert.That(ReportGenerator.DeriveStatus(requirement), Is.EqualTo("Mixed"));
+        }
+
+        [Test]
+        public void Verify_that_DeriveStatus_returns_Inconclusive_when_no_Passed_and_no_Failed()
+        {
+            var requirement = new Requirement { Identifier = "REQ-99" };
+            requirement.TestCases.Add(new TestCase { FullName = "T1", Result = "Inconclusive" });
+            requirement.TestCases.Add(new TestCase { FullName = "T2", Result = "Skipped" });
+
+            Assert.That(ReportGenerator.DeriveStatus(requirement), Is.EqualTo("Inconclusive"));
+        }
     }
 }
