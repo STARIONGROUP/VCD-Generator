@@ -83,7 +83,6 @@ namespace VCD.Generator.Commands
             this.NoLogoOption = new Option<bool>("--no-logo")
             {
                 Description = "Suppress the logo",
-                DefaultValueFactory = _ => false,
             };
             this.Options.Add(this.NoLogoOption);
 
@@ -116,11 +115,7 @@ namespace VCD.Generator.Commands
             this.SourceDirectoryOption = new Option<DirectoryInfo>("--source-directory", "-sd")
             {
                 Description = "The directory that contains the test result files, this directory is process recursively",
-                DefaultValueFactory = _ =>
-                {
-                    var strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-                    return new FileInfo(strExeFilePath).Directory;
-                },
+                DefaultValueFactory = _ => new DirectoryInfo(AppContext.BaseDirectory),
                 Required = true,
             };
             this.Options.Add(this.SourceDirectoryOption);

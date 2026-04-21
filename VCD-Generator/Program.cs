@@ -55,21 +55,21 @@ namespace VCD.Generator
         {
             var rootCommand = new GenerateCommand();
 
-            using var host = Host.CreateDefaultBuilder(args)
-                .UseSerilog((context, services, loggerConfiguration) => loggerConfiguration
-                    .ReadFrom.Configuration(context.Configuration))
-                .ConfigureServices((hostContext, services) =>
-                {
-                    services.AddSingleton<IRequirementsReader, RequirementsReader>();
-                    services.AddSingleton<ITestResultReader, TestResultReader>();
-                    services.AddSingleton<IMatchMaker, MatchMaker>();
-                    services.AddSingleton<IReportGenerator, ReportGenerator>();
-                    services.AddSingleton<GenerateCommand.Handler>();
-                })
-                .Build();
-
             rootCommand.SetAction(async (parseResult, cancellationToken) =>
             {
+                using var host = Host.CreateDefaultBuilder(args)
+                    .UseSerilog((context, services, loggerConfiguration) => loggerConfiguration
+                        .ReadFrom.Configuration(context.Configuration))
+                    .ConfigureServices((hostContext, services) =>
+                    {
+                        services.AddSingleton<IRequirementsReader, RequirementsReader>();
+                        services.AddSingleton<ITestResultReader, TestResultReader>();
+                        services.AddSingleton<IMatchMaker, MatchMaker>();
+                        services.AddSingleton<IReportGenerator, ReportGenerator>();
+                        services.AddSingleton<GenerateCommand.Handler>();
+                    })
+                    .Build();
+
                 var handler = host.Services.GetRequiredService<GenerateCommand.Handler>();
                 rootCommand.BindTo(handler, parseResult);
                 return await handler.InvokeAsync();
