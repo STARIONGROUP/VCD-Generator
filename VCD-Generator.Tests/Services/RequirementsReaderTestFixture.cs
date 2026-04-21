@@ -117,5 +117,25 @@ namespace VCD.Generator.Tests.Services
 
             Assert.That(requirements.Count, Is.EqualTo(2));
         }
+
+        [Test(Description = "Covers the loop-exit / return -1 branch of QueryColumnNumber when the identifier column name is genuinely absent")]
+        public void Verify_that_Read_throws_when_identifier_column_name_is_absent_from_the_header_row()
+        {
+            Assert.That(
+                () => this.requirementsReader
+                    .Read(this.requirementsDocumentFileInfo_01, null, "DoesNotExist").ToList(),
+                Throws.TypeOf<InvalidRequirementsFormatException>()
+                    .With.Message.Contains("DoesNotExist"));
+        }
+
+        [Test(Description = "Covers the loop-exit / return -1 branch of QueryColumnNumber when the text column name is genuinely absent")]
+        public void Verify_that_Read_throws_when_text_column_name_is_absent_from_the_header_row()
+        {
+            Assert.That(
+                () => this.requirementsReader
+                    .Read(this.requirementsDocumentFileInfo_01, null, "Identifier", "DoesNotExist").ToList(),
+                Throws.TypeOf<InvalidRequirementsFormatException>()
+                    .With.Message.Contains("DoesNotExist"));
+        }
     }
 }
