@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+
+title: "VCD Generator: requirements verification support"
+abstract: "The purpose of the VCD Generator is to create Verification Control Documents (reports) that make record of which tests contribute to the verification of a set of Requirements."
+version: "7.0.0"
+date-released: "2024-10-06"
+url: "https://github.com/STARIONGROUP/VCD-Generator"
+
+authors:
+  - given-names: "Sam"
+    family-names: "Gerené"
+    affiliation: "Starion Group S.A."
+    orcid: "https://orcid.org/0009-0000-1848-550X"
+    affiliation: "Starion Group S.A."
+  - name: "Starion Group S.A."
+
+repository-code: "https://github.com/STARIONGROUP/VCD-Generator"
+license: "Apache-2.0"
+
+preferred-citation:
+  type: software
+  title: "VCD Generator: requirements verification support"
+  authors:
+    - given-names: "Sam"
+      family-names: "Gerené"
+      orcid: "https://orcid.org/0009-0000-1848-550X"
+      affiliation: "Starion Group S.A."
+    - name: "Starion Group S.A."
+  version: "7.0.0"
+  url: "https://github.com/STARIONGROUP/VCD-Generator"
+  date-released: "2024-10-06"
