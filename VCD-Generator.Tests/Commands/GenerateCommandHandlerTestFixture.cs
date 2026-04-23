@@ -22,7 +22,6 @@ namespace VCD.Generator.Tests.Commands
 {
     using System;
     using System.Collections.Generic;
-    using System.CommandLine.Invocation;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
@@ -92,22 +91,9 @@ namespace VCD.Generator.Tests.Commands
         }
 
         [Test]
-        public void Verify_that_GenerateCommand_Invoke_throws_exception()
-        {
-            var invocationContext = new InvocationContext(null);
-
-            Assert.That(() =>
-            {
-                this.handler.Invoke(invocationContext);
-            }, Throws.TypeOf<NotSupportedException>());
-        }
-
-        [Test]
         public async Task Verify_that_InvokeAsync_returns_0()
         {
-            var invocationContext = new InvocationContext(null);
-
-            var result = await this.handler.InvokeAsync(invocationContext);
+            var result = await this.handler.InvokeAsync();
 
             this.requirementsReader.Verify(x =>
                 x.Read(It.IsAny<FileInfo>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()),
@@ -129,11 +115,9 @@ namespace VCD.Generator.Tests.Commands
         [Test]
         public async Task Verify_that_InvokeAsync_returns_minus_one_when_requirementsfile_does_not_exist()
         {
-            var invocationContext = new InvocationContext(null);
-
             this.handler.RequirementsFile = new FileInfo(TestContext.CurrentContext.TestDirectory);
 
-            var result = await this.handler.InvokeAsync(invocationContext);
+            var result = await this.handler.InvokeAsync();
 
             Assert.That(result, Is.EqualTo(-1));
         }
@@ -141,11 +125,9 @@ namespace VCD.Generator.Tests.Commands
         [Test]
         public async Task Verify_that_InvokeAsync_returns_minus_one_when_sourcedirectory_dooes_not_exist()
         {
-            var invocationContext = new InvocationContext(null);
-
             this.handler.SourceDirectory = new DirectoryInfo(@"z:\some-non-existing-directory");
 
-            var result = await this.handler.InvokeAsync(invocationContext);
+            var result = await this.handler.InvokeAsync();
 
             Assert.That(result, Is.EqualTo(-1));
         }

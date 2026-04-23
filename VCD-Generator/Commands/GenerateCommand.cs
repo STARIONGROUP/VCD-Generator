@@ -1,20 +1,20 @@
-﻿// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // <copyright file="GenerateCommand.cs" company="Starion Group S.A.">
-// 
-//   Copyright 2022-2024 Starion Group S.A.
-// 
+//
+//   Copyright 2022-2026 Starion Group S.A.
+//
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
 //   You may obtain a copy of the License at
-// 
+//
 //        http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
-// 
+//
 // </copyright>
 // ------------------------------------------------------------------------------------------------
 
@@ -23,7 +23,6 @@ namespace VCD.Generator.Commands
     using System;
     using System.Collections.Generic;
     using System.CommandLine;
-    using System.CommandLine.Invocation;
     using System.IO;
     using System.Linq;
     using System.Threading;
@@ -42,70 +41,118 @@ namespace VCD.Generator.Commands
     public class GenerateCommand : RootCommand
     {
         /// <summary>
+        /// The <see cref="Option{T}"/> to suppress the logo
+        /// </summary>
+        public Option<bool> NoLogoOption { get; }
+
+        /// <summary>
+        /// The <see cref="Option{T}"/> for the requirements spreadsheet file
+        /// </summary>
+        public Option<FileInfo> RequirementsFileOption { get; }
+
+        /// <summary>
+        /// The <see cref="Option{T}"/> for the name of the requirements sheet
+        /// </summary>
+        public Option<string> RequirementsSheetNameOption { get; }
+
+        /// <summary>
+        /// The <see cref="Option{T}"/> for the name of the requirements id column
+        /// </summary>
+        public Option<string> RequirementsIdColumnOption { get; }
+
+        /// <summary>
+        /// The <see cref="Option{T}"/> for the name of the requirements text column
+        /// </summary>
+        public Option<string> RequirementsTextColumnOption { get; }
+
+        /// <summary>
+        /// The <see cref="Option{T}"/> for the directory that contains the test result files
+        /// </summary>
+        public Option<DirectoryInfo> SourceDirectoryOption { get; }
+
+        /// <summary>
+        /// The <see cref="Option{T}"/> for the path of the generated report file
+        /// </summary>
+        public Option<FileInfo> OutputReportOption { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="GenerateCommand"/>
         /// </summary>
         public GenerateCommand() : base("VCD Generator")
         {
-            var noLogoOption = new Option<bool>(
-                name: "--no-logo",
-                description: "Suppress the logo",
-                getDefaultValue: () => false);
-            this.AddOption(noLogoOption);
+            this.NoLogoOption = new Option<bool>("--no-logo")
+            {
+                Description = "Suppress the logo",
+            };
+            this.Options.Add(this.NoLogoOption);
 
-            var requirementsFileOption = new Option<FileInfo>(
-                name: "--requirements-file",
-                description: "The spreadsheet file that contains the requirements that need to be verified",
-                getDefaultValue: () => new FileInfo("requirements.xlsx"));
-            requirementsFileOption.AddAlias("-rf");
-            requirementsFileOption.IsRequired = true;
-            this.AddOption(requirementsFileOption);
+            this.RequirementsFileOption = new Option<FileInfo>("--requirements-file", "-rf")
+            {
+                Description = "The spreadsheet file that contains the requirements that need to be verified",
+                DefaultValueFactory = _ => new FileInfo("requirements.xlsx"),
+                Required = true,
+            };
+            this.Options.Add(this.RequirementsFileOption);
 
-            var requirementsSheetNameOption = new Option<string>(
-                name: "--requirements-sheet-name",
-                description: "The name of the requirements sheet in the spreadsheet file that is to be processed. If left empty then the first sheet in the workbook will be used.");
-            requirementsSheetNameOption.AddAlias("-sn");
-            requirementsSheetNameOption.IsRequired = false;
-            this.AddOption(requirementsSheetNameOption);
+            this.RequirementsSheetNameOption = new Option<string>("--requirements-sheet-name", "-sn")
+            {
+                Description = "The name of the requirements sheet in the spreadsheet file that is to be processed. If left empty then the first sheet in the workbook will be used.",
+            };
+            this.Options.Add(this.RequirementsSheetNameOption);
 
-            var identifierColumnNameOption = new Option<string>(
-                name:"--requirements-id-column",
-                description: "The name of the table-column that contains the identifier of the requirements. If left empty then the first column with content is used.");
-            identifierColumnNameOption.IsRequired = false;
-            identifierColumnNameOption.AddAlias("-id");
-            this.AddOption(identifierColumnNameOption);
+            this.RequirementsIdColumnOption = new Option<string>("--requirements-id-column", "-id")
+            {
+                Description = "The name of the table-column that contains the identifier of the requirements. If left empty then the first column with content is used.",
+            };
+            this.Options.Add(this.RequirementsIdColumnOption);
 
-            var textColumnNameOption = new Option<string>(
-                name: "--requirements-text-column",
-                description: "The name of the table-column that contains the text of the requirements. If left empty then the requirement text is ignored.");
-            textColumnNameOption.IsRequired = false;
-            textColumnNameOption.AddAlias("-txt");
-            this.AddOption(textColumnNameOption);
+            this.RequirementsTextColumnOption = new Option<string>("--requirements-text-column", "-txt")
+            {
+                Description = "The name of the table-column that contains the text of the requirements. If left empty then the requirement text is ignored.",
+            };
+            this.Options.Add(this.RequirementsTextColumnOption);
 
-            var testResultsFileOption = new Option<DirectoryInfo>(
-                name: "--source-directory",
-                description: "The directory that contains the test result files, this directory is process recursively",
-                getDefaultValue: () =>
-                {
-                    var strExeFilePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-                    return new FileInfo(strExeFilePath).Directory;
-                });
-            testResultsFileOption.AddAlias("-sd");
-            testResultsFileOption.IsRequired = true;
-            this.AddOption(testResultsFileOption);
+            this.SourceDirectoryOption = new Option<DirectoryInfo>("--source-directory", "-sd")
+            {
+                Description = "The directory that contains the test result files, this directory is process recursively",
+                DefaultValueFactory = _ => new DirectoryInfo(AppContext.BaseDirectory),
+                Required = true,
+            };
+            this.Options.Add(this.SourceDirectoryOption);
 
-            var reportFileOption = new Option<FileInfo>(
-                name: "--output-report",
-                description: "The path to the report file",
-                getDefaultValue: () => new FileInfo("VCD-report.xlsx"));
-            reportFileOption.AddAlias("-o");
-            reportFileOption.IsRequired = true;
-            this.AddOption(reportFileOption);
+            this.OutputReportOption = new Option<FileInfo>("--output-report", "-o")
+            {
+                Description = "The path to the report file",
+                DefaultValueFactory = _ => new FileInfo("VCD-report.xlsx"),
+                Required = true,
+            };
+            this.Options.Add(this.OutputReportOption);
+        }
+
+        /// <summary>
+        /// Binds the values parsed from the command line to the <see cref="Handler"/>
+        /// </summary>
+        /// <param name="handler">
+        /// The <see cref="Handler"/> that will execute the command
+        /// </param>
+        /// <param name="parseResult">
+        /// The <see cref="ParseResult"/> produced by parsing the command line arguments
+        /// </param>
+        public void BindTo(Handler handler, ParseResult parseResult)
+        {
+            handler.NoLogo = parseResult.GetValue(this.NoLogoOption);
+            handler.RequirementsFile = parseResult.GetValue(this.RequirementsFileOption);
+            handler.RequirementsSheetName = parseResult.GetValue(this.RequirementsSheetNameOption);
+            handler.RequirementsIdColumn = parseResult.GetValue(this.RequirementsIdColumnOption);
+            handler.RequirementsTextColumn = parseResult.GetValue(this.RequirementsTextColumnOption);
+            handler.SourceDirectory = parseResult.GetValue(this.SourceDirectoryOption);
+            handler.OutputReport = parseResult.GetValue(this.OutputReportOption);
         }
 
         /// <summary>
         /// The Command Handler of the <see cref="GenerateCommand"/>
         /// </summary>
-        public new class Handler : ICommandHandler
+        public class Handler
         {
             /// <summary>
             /// The (injected) <see cref="IRequirementsReader"/> that is used to read a set of requirements
@@ -152,15 +199,15 @@ namespace VCD.Generator.Commands
             /// </param>
             public Handler(IRequirementsReader requirementsReader, ITestResultReader resultReader, IMatchMaker matchMaker, IReportGenerator reportGenerator, ILogger<GenerateCommand>  logger)
             {
-                this.requirementsReader = requirementsReader 
+                this.requirementsReader = requirementsReader
                     ?? throw new ArgumentNullException(nameof(requirementsReader));
                 this.resultReader = resultReader
                     ?? throw new ArgumentNullException(nameof(resultReader));
                 this.reportGenerator = reportGenerator
                     ?? throw new ArgumentNullException(nameof(reportGenerator));
-                this.matchMaker = matchMaker 
+                this.matchMaker = matchMaker
                     ?? throw new ArgumentNullException(nameof(matchMaker));
-                this.logger = logger 
+                this.logger = logger
                     ?? throw new ArgumentNullException(nameof(logger));
             }
 
@@ -200,29 +247,12 @@ namespace VCD.Generator.Commands
             public FileInfo OutputReport { get; set; }
 
             /// <summary>
-            /// Invokes the <see cref="ICommandHandler"/>
+            /// Asynchronously executes the command
             /// </summary>
-            /// <param name="context">
-            /// The <see cref="InvocationContext"/> 
-            /// </param>
             /// <returns>
             /// 0 when successful, another if not
             /// </returns>
-            public int Invoke(InvocationContext context)
-            {
-                throw new NotSupportedException();
-            }
-
-            /// <summary>
-            /// Asynchronously invokes the <see cref="ICommandHandler"/>
-            /// </summary>
-            /// <param name="context">
-            /// The <see cref="InvocationContext"/> 
-            /// </param>
-            /// <returns>
-            /// 0 when successful, another if not
-            /// </returns>
-            public async Task<int> InvokeAsync(InvocationContext context)
+            public async Task<int> InvokeAsync()
             {
                 if (!this.NoLogo)
                 {
@@ -254,7 +284,7 @@ namespace VCD.Generator.Commands
 
                             ctx.Status("Reading Requirements at Warp 2...");
                             Thread.Sleep(1500);
-                            
+
                             IEnumerable<Requirement> requirements;
 
                             try
@@ -262,7 +292,7 @@ namespace VCD.Generator.Commands
                                 requirements = this.requirementsReader.Read(
                                     this.RequirementsFile,
                                     this.RequirementsSheetName,
-                                    this.RequirementsIdColumn, 
+                                    this.RequirementsIdColumn,
                                     this.RequirementsTextColumn);
                                 AnsiConsole.MarkupLine($"[grey]LOG:[/] A total of [bold]{requirements.Count()}[/] requirements were read");
                             }
@@ -303,14 +333,14 @@ namespace VCD.Generator.Commands
 
                             this.reportGenerator.Generate(requirements, this.OutputReport.FullName, ReportKind.SpreadSheet);
                             AnsiConsole.MarkupLine($"[grey]LOG:[/] VCD report generated at [bold]{this.OutputReport.FullName}[/]");
-                            
+
                             return Task.FromResult(0);
                         });
                 }
                 catch (Exception ex)
                 {
                     AnsiConsole.WriteLine();
-                    AnsiConsole.MarkupLine("[red]An exception occurred, please report an issue at[/]"); 
+                    AnsiConsole.MarkupLine("[red]An exception occurred, please report an issue at[/]");
                     AnsiConsole.MarkupLine("[link] https://github.com/RHEAGROUP/VCD-Generator/issues [/]");
                     AnsiConsole.WriteLine();
                     AnsiConsole.WriteException(ex);
