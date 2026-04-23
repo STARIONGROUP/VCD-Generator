@@ -171,7 +171,7 @@ namespace VCD.Generator.Services
         {
             if (columnName != null)
             {
-                for (int i = start; i < end; i++)
+                for (int i = start; i <= end; i++)
                 {
                     var activeCell = requirementsSheet.Cell(row, i);
                     

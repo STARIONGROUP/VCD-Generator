@@ -27,6 +27,7 @@ namespace VCD.Generator.Tests.Services
 
     using NUnit.Framework;
 
+    using VCD.Generator;
     using VCD.Generator.Services;
 
     /// <summary>
@@ -104,6 +105,37 @@ namespace VCD.Generator.Tests.Services
                 .Read(this.requirementsDocumentFileInfo_02, null, "Identifier", "Requirement Text").ToList();
 
             Assert.That(requirements.Count, Is.EqualTo(2));
+        }
+
+        [Test(Description = "Regression: the rightmost header column must be reachable by the column scan")]
+        public void Verify_that_Read_finds_a_text_column_located_in_the_last_used_column_of_the_header_row()
+        {
+            // "Comments" is the rightmost populated header in Requirements-01.xlsx
+            // (column 13, equal to LastCellUsed().Address.ColumnNumber).
+            var requirements = this.requirementsReader
+                .Read(this.requirementsDocumentFileInfo_01, null, "Identifier", "Comments").ToList();
+
+            Assert.That(requirements.Count, Is.EqualTo(2));
+        }
+
+        [Test(Description = "Covers the loop-exit / return -1 branch of QueryColumnNumber when the identifier column name is genuinely absent")]
+        public void Verify_that_Read_throws_when_identifier_column_name_is_absent_from_the_header_row()
+        {
+            Assert.That(
+                () => this.requirementsReader
+                    .Read(this.requirementsDocumentFileInfo_01, null, "DoesNotExist").ToList(),
+                Throws.TypeOf<InvalidRequirementsFormatException>()
+                    .With.Message.Contains("DoesNotExist"));
+        }
+
+        [Test(Description = "Covers the loop-exit / return -1 branch of QueryColumnNumber when the text column name is genuinely absent")]
+        public void Verify_that_Read_throws_when_text_column_name_is_absent_from_the_header_row()
+        {
+            Assert.That(
+                () => this.requirementsReader
+                    .Read(this.requirementsDocumentFileInfo_01, null, "Identifier", "DoesNotExist").ToList(),
+                Throws.TypeOf<InvalidRequirementsFormatException>()
+                    .With.Message.Contains("DoesNotExist"));
         }
     }
 }
