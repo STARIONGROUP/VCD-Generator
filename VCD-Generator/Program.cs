@@ -62,9 +62,12 @@ namespace VCD.Generator
                         .ReadFrom.Configuration(context.Configuration))
                     .ConfigureServices((hostContext, services) =>
                     {
-                        services.AddSingleton<IRequirementsReader, RequirementsReader>();
+                        services.AddSingleton<RequirementsReader>();
+                        services.AddSingleton<CsvRequirementsReader>();
+                        services.AddSingleton<IRequirementsReader, RequirementsReaderDispatcher>();
                         services.AddSingleton<ITestResultReader, TestResultReader>();
                         services.AddSingleton<IMatchMaker, MatchMaker>();
+                        services.AddSingleton<CsvReportGenerator>();
                         services.AddSingleton<IReportGenerator, ReportGenerator>();
                         services.AddSingleton<GenerateCommand.Handler>();
                     })

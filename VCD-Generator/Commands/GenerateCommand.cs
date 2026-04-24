@@ -331,7 +331,11 @@ namespace VCD.Generator.Commands
                             ctx.Status($"Generating report at Warp 11, Captain..., SLOW DOWN!");
                             Thread.Sleep(1500);
 
-                            this.reportGenerator.Generate(requirements, this.OutputReport.FullName, ReportKind.SpreadSheet);
+                            var reportKind = string.Equals(this.OutputReport.Extension, ".csv", StringComparison.OrdinalIgnoreCase)
+                                ? ReportKind.Csv
+                                : ReportKind.SpreadSheet;
+
+                            this.reportGenerator.Generate(requirements, this.OutputReport.FullName, reportKind);
                             AnsiConsole.MarkupLine($"[grey]LOG:[/] VCD report generated at [bold]{this.OutputReport.FullName}[/]");
 
                             return Task.FromResult(0);
