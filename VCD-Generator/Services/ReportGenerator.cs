@@ -44,13 +44,22 @@ namespace VCD.Generator.Services
         private readonly ILogger<ReportGenerator> logger;
 
         /// <summary>
+        /// The <see cref="CsvReportGenerator"/> used to generate CSV reports
+        /// </summary>
+        private readonly CsvReportGenerator csvReportGenerator;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="TestResultReader"/> class.
         /// </summary>
+        /// <param name="csvReportGenerator">
+        /// The (injected) <see cref="CsvReportGenerator"/> used to generate CSV reports
+        /// </param>
         /// <param name="loggerFactory">
         /// The (injected) <see cref="ILoggerFactory"/> used to setup logging
         /// </param>
-        public ReportGenerator(ILoggerFactory loggerFactory = null)
+        public ReportGenerator(CsvReportGenerator csvReportGenerator, ILoggerFactory loggerFactory = null)
         {
+            this.csvReportGenerator = csvReportGenerator ?? throw new ArgumentNullException(nameof(csvReportGenerator));
             this.logger = loggerFactory == null ? NullLogger<ReportGenerator>.Instance : loggerFactory.CreateLogger<ReportGenerator>();
         }
 
@@ -75,6 +84,9 @@ namespace VCD.Generator.Services
                     break;
                 case ReportKind.Html:
                     this.GeneratedHtmlReport(requirements, filePath);
+                    break;
+                case ReportKind.Csv:
+                    this.csvReportGenerator.Generate(requirements, filePath);
                     break;
             }
         }

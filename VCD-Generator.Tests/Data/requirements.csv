@@ -1,0 +1,6 @@
+Identifier,Requirement Text,Section Nr,Main Section,WP,Priority,User Journey,Verif Method,Compliance (Y/N/P),Actual Compliance(Y/N/P),Close out status,Comments
+REQ-01,The VCD Generator shall read the test results created by the NunitXml.TestLogger in the Nunit3 output format,1.1,VCD Generation,1,high,User Journey,Test,Y,Y,-,-
+  REQ-02  ,"Requirement text, with an embedded comma for RFC-4180 quoting",1.2,VCD Generation,2,high,User Journey,Test,Y,Y,-,-
+,Row with empty identifier should be skipped by the importer,1.3,VCD Generation,3,high,User Journey,Test,Y,Y,-,-
+REQ-03,"Line one of requirement
+Line two continues here",1.4,VCD Generation,4,high,User Journey,Test,Y,Y,-,-

@@ -31,6 +31,11 @@ namespace VCD.Generator.Services
         SpreadSheet,
 
         /// <summary>
+        /// Assertion that the report kind is a CSV file
+        /// </summary>
+        Csv,
+
+        /// <summary>
         /// Assertion that the report kind is an HTML
         /// </summary>
         Html

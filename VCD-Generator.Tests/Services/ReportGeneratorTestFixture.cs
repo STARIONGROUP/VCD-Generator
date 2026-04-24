@@ -52,7 +52,9 @@ namespace VCD.Generator.Tests.Services
 
             this.spreadsheetReportPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "VCD-report.xlsx");
 
-            this.reportGenerator = new ReportGenerator(this.loggerFactory);
+            var csvReportGenerator = new CsvReportGenerator(this.loggerFactory);
+
+            this.reportGenerator = new ReportGenerator(csvReportGenerator, this.loggerFactory);
 
             this.CreateTestData();
         }

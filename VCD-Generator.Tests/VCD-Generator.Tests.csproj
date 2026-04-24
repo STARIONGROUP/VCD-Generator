@@ -59,6 +59,9 @@
 		<None Update="Data\Requirements-02.xlsx">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
+		<None Update="Data\requirements.csv">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 		<None Update="Data\VCD-Generator.Tests.Result.xml">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>
